@@ -1,5 +1,5 @@
 import React from "react";
-import NavbarLinks from "./NavbarLinks";
+import Navlinks from "./navlinks";
 import { FaSearch } from "react-icons/fa";
 
 export default function Navbar() {
@@ -10,7 +10,7 @@ export default function Navbar() {
 
       {/* Links */}
       <div className="hidden md:flex items-center space-x-8">
-        <NavbarLinks />
+        <Navlinks />
       </div>
 
       {/* Search Icon */}

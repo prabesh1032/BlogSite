@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ChevronDown } from "lucide-react";
 
-export default function NavbarLinks() {
+export default function Navlinks() {
   const [showDropdown, setShowDropdown] = useState(false);
 
   const links = [
