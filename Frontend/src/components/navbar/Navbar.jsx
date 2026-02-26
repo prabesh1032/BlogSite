@@ -6,7 +6,7 @@ export default function Navbar() {
   return (
     <nav className="w-full px-8 py-4 flex items-center justify-between shadow-sm">
       {/* Logo */}
-      <div className="text-2xl font-bold text-black">BlogSite</div>
+      <div className="text-2xl font-bold text-black">TypeTheory</div>
 
       {/* Links */}
       <div className="hidden md:flex items-center space-x-8">

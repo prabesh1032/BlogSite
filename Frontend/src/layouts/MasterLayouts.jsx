@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/navbar/navbar";
+import Footer from "../components/footer/Footer";
 
 export default function MasterLayout() {
 
@@ -10,6 +11,8 @@ export default function MasterLayout() {
             <main className="grow">
                 <Outlet />
             </main>
+                {/* Footer */}
+                <Footer />
         </div>
     )
 }
