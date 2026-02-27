@@ -8,7 +8,7 @@ const Footer = () => {
 
                 {/* LEFT SIDE */}
                 <div>
-                    <h2 className="text-sm tracking-[0.3em] text-white uppercase mb-6">
+                    <h2 className="text-sm tracking-[0.4em] text-white uppercase mb-6">
                         About TypeTheory
                     </h2>
 
@@ -33,7 +33,7 @@ const Footer = () => {
 
                 {/* RIGHT SIDE */}
                 <div>
-                    <h2 className="text-sm tracking-[0.3em] text-white uppercase mb-6">
+                    <h2 className="text-sm tracking-[0.4em] text-white uppercase mb-6">
                         Our Newsletter
                     </h2>
 
