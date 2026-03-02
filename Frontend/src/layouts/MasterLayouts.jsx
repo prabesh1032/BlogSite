@@ -8,11 +8,11 @@ export default function MasterLayout() {
         <div className="min-h-screen flex flex-col bg-white">
             {/* Navbar */}
             <Navbar />
-            <main className="grow">
+            <main className="grow container mx-auto">
                 <Outlet />
             </main>
-                {/* Footer */}
-                <Footer />
+            {/* Footer */}
+            <Footer />
         </div>
     )
 }

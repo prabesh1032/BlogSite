@@ -8,8 +8,10 @@ export default function Navlinks() {
     { name: "Home", href: "/" },
     { name: "Categories", href: "/category" },
     { name: "Blog", href: "/blog" },
+    { name: "My Contain", href: "/mycontains" },
     { name: "About", href: "/about" },
     { name: "Contact", href: "/contact" },
+    { name: "Login", href: "/login" },
   ];
 
   const categories = [
