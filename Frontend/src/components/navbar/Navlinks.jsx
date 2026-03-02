@@ -6,9 +6,8 @@ export default function Navlinks() {
 
   const links = [
     { name: "Home", href: "/" },
-    { name: "Categories", href: "#" },
+    { name: "Categories", href: "/category" },
     { name: "Blog", href: "/blog" },
-    { name: "Styles", href: "/styles" },
     { name: "About", href: "/about" },
     { name: "Contact", href: "/contact" },
   ];

@@ -17,7 +17,7 @@ const Hero = () => {
         </div>
 
         {/* Foreground Image - Tall Format (Overlapping) */}
-        <div className="absolute top-5 w-210 h-140 overflow-hidden shadow-2xl z-10 rounded-3xl">
+        <div className="absolute top-5 w-210 h-140 overflow-hidden shadow-2xl z-10">
           <img
             src={blog1}
             alt="Featured Blog"
@@ -25,20 +25,20 @@ const Hero = () => {
           />
           
           {/* Dark Overlay */}
-          <div className="absolute inset-0 bg-black/50 z-20"></div>
+          <div className="absolute inset-0 bg-black/50 z-0"></div>
 
           {/* Content */}
           <div className="absolute inset-0 z-11 h-full flex flex-col items-center justify-center text-center text-white p-7">
             
-            <p className="text-xs tracking-widest mb-4 text-gray-300 uppercase">
+            <p className="text-xs font-bold tracking-[0.4em] mb-4 uppercase hover:text-blue-600">
               Music
             </p>
 
-            <h1 className="text-2xl font-serif leading-tight mb-5 font-bold">
+            <h1 className="text-3xl font-serif leading-tight mb-5 px-16 font-bold">
               What Your Music Preference Says About You and Your Personality.
             </h1>
 
-            <div className="flex items-center gap-3 text-gray-300 text-xs">
+            <div className="flex items-center gap-3 text-white text-xs">
               <img
                 src="/author.jpg"
                 alt="Author"
