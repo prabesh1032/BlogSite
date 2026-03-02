@@ -4,7 +4,7 @@ import { FaSearch } from "react-icons/fa";
 
 export default function Navbar() {
   return (
-    <nav className="w-full px-8 py-4 flex items-center justify-between shadow-sm">
+    <nav className="w-full px-8 py-4 flex items-center justify-between shadow-sm sticky top-0 bg-white z-50">
       {/* Logo */}
       <div className="text-2xl font-bold text-black">TypeTheory</div>
 

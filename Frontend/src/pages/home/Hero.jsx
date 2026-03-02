@@ -28,7 +28,7 @@ const Hero = () => {
           <div className="absolute inset-0 bg-black/50 z-20"></div>
 
           {/* Content */}
-          <div className="absolute inset-0 z-30 h-full flex flex-col items-center justify-center text-center text-white p-7">
+          <div className="absolute inset-0 z-11 h-full flex flex-col items-center justify-center text-center text-white p-7">
             
             <p className="text-xs tracking-widest mb-4 text-gray-300 uppercase">
               Music

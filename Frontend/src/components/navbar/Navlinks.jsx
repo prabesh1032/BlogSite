@@ -48,7 +48,7 @@ export default function Navlinks() {
               </button>
 
               {showDropdown && (
-                <div className="absolute top-8 left-0 bg-white shadow-lg rounded-md py-3 w-40">
+                <div className="absolute top-8 left-0 z-12 bg-white shadow-lg rounded-md py-3 w-40">
                   {categories.map((category) => (
                     <div
                       key={category}
