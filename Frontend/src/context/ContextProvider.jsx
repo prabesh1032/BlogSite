@@ -2,7 +2,7 @@ import { useState } from "react";
 import StateContext from "./StateContext";
 
 export const ContextProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({});
   const [token, _setToken] = useState(
     localStorage.getItem("Access_Token") || null
   );
