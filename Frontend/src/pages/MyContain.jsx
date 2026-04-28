@@ -2,7 +2,7 @@ import React from 'react'
 
 function MyContain() {
   return (
-    <div>MyContain</div>
+    <div>MyContains</div>
   )
 }
 
