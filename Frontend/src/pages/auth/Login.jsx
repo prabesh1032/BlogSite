@@ -13,25 +13,37 @@ export default function Login() {
   const navigate = useNavigate();
   const { setUser, setToken } = useStateContext();
 
+
   const [showPassword, setShowPassword] = React.useState(false);
   const [serverError, setServerError] = React.useState("");
-
+  const [loading, setLoading] = React.useState(false);
   const submitForm = async (data) => {
     try {
+      setLoading(true);
       setServerError("");
       const res = await AuthService.login(data);
       setUser(res.user);
       setToken(res.token);
       navigate("/");
     } catch (err) {
-      setServerError(err.response?.data?.message || "Invalid email or password");
+      if (err.response?.data?.errors) {
+        const firstError = Object.values(err.response.data.errors)[0][0];
+        setServerError(firstError);
+      } else if (err.response?.data?.message) {
+        setServerError(err.response.data.message);
+      } else {
+        setServerError("Invalid email or password");
+      }
+    }
+    finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-teal-500">
-      
-      <form 
+
+      <form
         onSubmit={handleSubmit(submitForm)}
         className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md"
       >
@@ -108,9 +120,10 @@ export default function Login() {
         {/* Button */}
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition"
+          disabled={loading}
+          className="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          Login
+          {loading ? "Logging in..." : "Login"}
         </button>
 
         {/* Signup Link */}

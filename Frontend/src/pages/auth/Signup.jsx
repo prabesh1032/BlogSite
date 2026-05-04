@@ -2,13 +2,13 @@
 import React from 'react'
 import { useForm } from "react-hook-form"
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z} from 'zod';
+import { z } from 'zod';
 import { Eye, EyeOff } from 'lucide-react';
 import AuthService from '../../services/authService';
 import { useNavigate } from "react-router-dom";
 import { useState } from 'react';
 
- const formSchema = z
+const formSchema = z
   .object({
     name: z
       .string()
@@ -48,32 +48,35 @@ export default function Register() {
   const [serverError, setServerError] = useState("");
   const [loading, setLoading] = useState(false);
 
- const submitForm = async (data) => {
-  try {
-    setLoading(true);
-    setServerError("");
+  const submitForm = async (data) => {
+    try {
+      setLoading(true);
+      setServerError("");
 
-    const res = await AuthService.signup(data);
+      const res = await AuthService.signup(data);
 
-    console.log(res);
+      console.log(res);
 
-    navigate("/login");
+      navigate("/login");
 
-  } catch (err) {
-    if (err.response?.data?.message) {
-      setServerError(err.response.data.message);
-    } else {
-      setServerError("Something went wrong");
+    } catch (err) {
+      if (err.response?.data?.errors) {
+        const firstError = Object.values(err.response.data.errors)[0][0];
+        setServerError(firstError);
+      } else if (err.response?.data?.message) {
+        setServerError(err.response.data.message);
+      } else {
+        setServerError("Something went wrong");
+      }
+    } finally {
+      setLoading(false);
     }
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-indigo-500 to-purple-600">
-      
-      <form 
+
+      <form
         onSubmit={handleSubmit(submitForm)}
         className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md"
       >
@@ -150,9 +153,10 @@ export default function Register() {
         {/* Button */}
         <button
           type="submit"
-          className="w-full bg-indigo-600 text-white py-2 rounded-lg font-semibold hover:bg-indigo-700 transition"
+          disabled={loading}
+          className="w-full bg-indigo-600 text-white py-2 rounded-lg font-semibold hover:bg-indigo-700 transition disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          Register
+          {loading ? "Registering..." : "Register"}
         </button>
 
       </form>

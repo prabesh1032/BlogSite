@@ -1,18 +1,23 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from "react";
 import { ChevronDown } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import useStateContext from "../../context/useStateContext";
+import AuthService from "../../services/authService";
 
 export default function Navlinks() {
   const [showDropdown, setShowDropdown] = useState(false);
+  const [loggingOut, setLoggingOut] = useState(false);
+  const { token, setUser, setToken } = useStateContext();
+  const navigate = useNavigate();
 
   const links = [
     { name: "Home", href: "/" },
     { name: "Categories", href: "/category" },
     { name: "Blog", href: "/blog" },
-    { name: "My Contain", href: "/mycontains" },
+    ...(token ? [{ name: "My Contain", href: "/mycontain" }] : []),
     { name: "About", href: "/about" },
     { name: "Contact", href: "/contact" },
-    { name: "Login", href: "/login" },
-    { name: "Register", href: "/register" },
   ];
 
   const categories = [
@@ -22,6 +27,20 @@ export default function Navlinks() {
     "Business",
     "Food",
   ];
+
+  const handleLogout = async () => {
+    try {
+      setLoggingOut(true);
+      await AuthService.logout();
+    } catch (err) {
+      // Ignore logout errors;
+    } finally {
+      setToken(null);
+      setUser({});
+      setLoggingOut(false);
+      navigate("/");
+    }
+  };
 
   return (
     <ul className="flex space-x-8 text-gray-700 font-medium relative">
@@ -65,6 +84,25 @@ export default function Navlinks() {
           )}
         </li>
       ))}
+
+      {token ? (
+        <li className="relative">
+          <button
+            type="button"
+            onClick={handleLogout}
+            disabled={loggingOut}
+            className="hover:text-black disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            {loggingOut ? "Logging out..." : "Logout"}
+          </button>
+        </li>
+      ) : (
+        <li className="relative">
+          <Link to="/login" className="hover:text-black cursor-pointer">
+            Login
+          </Link>
+        </li>
+      )}
     </ul>
   );
 };
