@@ -7,8 +7,8 @@ import Contact from './pages/Contact'
 import Category from './pages/Category'
 import Blogs from './pages/Blogs'
 import MyContain from './pages/MyContain'
-import Login from './pages/auth/Login'
-import Register from './pages/auth/Register'
+import Login  from './pages/auth/Login';
+import Register  from './pages/auth/Signup';
 import NotFound from './pages/NotFound'
 import ProtectedRoute from './routes/ProtectedRoute'
 import PublicRoute from './routes/PublicRoute'
