@@ -1,54 +1,63 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Hero from "./Hero";
 import BlogCard from "../../components/BlogCard";
-import { useNavigate } from "react-router-dom";
-
-const dummyBlogs = [
-    {
-        id: 1,
-        image: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600&h=400&fit=crop",
-        category: "DESIGN",
-        title: "3 Benefits of Minimalism In Interior Design.",
-        date: "JUNE 15, 2018"
-    },
-    {
-        id: 2,
-        image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&h=400&fit=crop",
-        category: "TECHNOLOGY",
-        title: "The Future of Web Development in 2026.",
-        date: "JANUARY 20, 2026"
-    },
-    {
-        id: 3,
-        image: "https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?w=600&h=400&fit=crop",
-        category: "TRAVEL",
-        title: "10 Must-Visit Destinations This Summer.",
-        date: "MARCH 5, 2025"
-    },
-    {
-        id: 4,
-        image: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=600&h=400&fit=crop",
-        category: "FOOD",
-        title: "The Art of Cooking Mediterranean Cuisine.",
-        date: "FEBRUARY 12, 2026"
-    },
-    {
-        id: 5,
-        image: "https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?w=600&h=400&fit=crop",
-        category: "LIFESTYLE",
-        title: "Building Better Habits for Success.",
-        date: "NOVEMBER 8, 2025"
-    },
-    {
-        id: 6,
-        image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=600&h=400&fit=crop",
-        category: "BUSINESS",
-        title: "Starting Your Own Business in 2026.",
-        date: "JANUARY 15, 2026"
-    }
-];
+import BlogService from "../../services/blogService";
 
 export default function Home() {
     const navigate = useNavigate();
+    const [blogs, setBlogs] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState("");
+
+    useEffect(() => {
+        let isMounted = true;
+
+        const loadBlogs = async () => {
+            try {
+                setError("");
+                setIsLoading(true);
+                const data = await BlogService.getBlogs();
+                const list = Array.isArray(data?.blogs) ? data.blogs : [];
+                if (isMounted) {
+                    setBlogs(list);
+                }
+            } catch (err) {
+                const message =
+                    err?.response?.data?.message ||
+                    err?.message ||
+                    "Failed to load blogs";
+                if (isMounted) {
+                    setError(message);
+                }
+            } finally {
+                if (isMounted) {
+                    setIsLoading(false);
+                }
+            }
+        };
+
+        loadBlogs();
+        return () => {
+            isMounted = false;
+        };
+    }, []);
+
+    const formatDate = (value) => {
+        if (!value) return "";
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return "";
+        return date
+            .toLocaleDateString("en-US", {
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+            })
+            .toUpperCase();
+    };
+
+    const fallbackImage =
+        "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&h=400&fit=crop";
 
     return (
         <>
@@ -61,18 +70,29 @@ export default function Home() {
                         Latest Articles
                     </h2>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
-                        {dummyBlogs.map((blog) => (
-                            <BlogCard
-                                key={blog.id}
-                                image={blog.image}
-                                category={blog.category}
-                                title={blog.title}
-                                date={blog.date}
-                                onClick={() => navigate(`/blog/${blog.id}`)}
-                            />
-                        ))}
-                    </div>
+                    {error && (
+                        <div className="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                            {error}
+                        </div>
+                    )}
+                    {isLoading ? (
+                        <p className="text-center text-sm text-gray-500">Loading blogs...</p>
+                    ) : blogs.length === 0 ? (
+                        <p className="text-center text-sm text-gray-500">No blogs found.</p>
+                    ) : (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
+                            {blogs.map((blog) => (
+                                <BlogCard
+                                    key={blog.id}
+                                    image={blog.image || fallbackImage}
+                                    category={(blog.category || "").toUpperCase()}
+                                    title={blog.title}
+                                    date={formatDate(blog.created_at)}
+                                    onClick={() => navigate(`/blog/${blog.id}`)}
+                                />
+                            ))}
+                        </div>
+                    )}
                 </div>
             </section>
         </>

@@ -1,5 +1,6 @@
 import {
   getBlogsAPI,
+  getMyBlogsAPI,
   getBlogAPI,
   createBlogAPI,
   updateBlogAPI,
@@ -10,6 +11,12 @@ const BlogService = {
   // Get all blogs
   async getBlogs() {
     const response = await getBlogsAPI();
+    return response;
+  },
+
+  // Get blogs for logged-in user
+  async getMyBlogs() {
+    const response = await getMyBlogsAPI();
     return response;
   },
 

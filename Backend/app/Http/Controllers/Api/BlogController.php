@@ -27,7 +27,10 @@ class BlogController extends Controller
             'image' => 'nullable|string',
         ]);
 
+        $user = $request->user();
+
         $blog = Blog::create([
+            'user_id' => $user?->id,
             'title' => $request->title,
             'category' => $request->category,
             'description' => $request->description,
@@ -41,6 +44,17 @@ class BlogController extends Controller
         ], 201);
     }
 
+    public function myBlogs(Request $request)
+    {
+        $blogs = Blog::where('user_id', $request->user()->id)
+            ->latest()
+            ->get();
+
+        return response()->json([
+            'blogs' => $blogs
+        ]);
+    }
+
     public function show($id)
     {
         $blog = Blog::findOrFail($id);
@@ -52,7 +66,7 @@ class BlogController extends Controller
 
     public function update(Request $request, $id)
     {
-        $blog = Blog::findOrFail($id);
+        $blog = Blog::where('user_id', $request->user()->id)->findOrFail($id);
 
         $request->validate([
             'title' => 'required|string|max:255',
@@ -77,7 +91,7 @@ class BlogController extends Controller
 
     public function destroy($id)
     {
-        $blog = Blog::findOrFail($id);
+        $blog = Blog::where('user_id', request()->user()->id)->findOrFail($id);
 
         $blog->delete();
 

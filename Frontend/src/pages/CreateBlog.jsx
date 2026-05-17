@@ -21,6 +21,7 @@ export default function CreateBlog() {
     register,
     handleSubmit,
     setValue,
+    clearErrors,
     formState: { errors, isSubmitting },
   } = useForm({
     defaultValues: {
@@ -52,7 +53,8 @@ export default function CreateBlog() {
       reader.onloadend = () => {
         const result = typeof reader.result === "string" ? reader.result : "";
         setPreview(result);
-        setValue("image", result, { shouldValidate: true });
+        setValue("image", result, { shouldValidate: true, shouldDirty: true });
+        clearErrors("image");
       };
       reader.readAsDataURL(file);
     }
@@ -131,10 +133,10 @@ export default function CreateBlog() {
               <input
                 type="file"
                 accept="image/*"
-                {...register("image", { required: "Image is required" })}
                 onChange={handleImageChange}
                 className="w-full rounded-lg border border-gray-200 px-4 py-2"
               />
+              <input type="hidden" {...register("image", { required: "Image is required" })} />
               {preview ? (
                 <img
                   src={preview}

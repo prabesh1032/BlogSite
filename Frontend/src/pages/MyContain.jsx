@@ -16,7 +16,7 @@ export default function MyContain() {
       try {
         setError("");
         setIsLoading(true);
-        const data = await BlogService.getBlogs();
+        const data = await BlogService.getMyBlogs();
         const list = Array.isArray(data?.blogs) ? data.blogs : [];
         if (isMounted) {
           setBlogs(list);

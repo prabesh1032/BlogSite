@@ -6,6 +6,12 @@ export async function getBlogsAPI() {
   return res.data;
 }
 
+// Get blogs for logged-in user
+export async function getMyBlogsAPI() {
+  const res = await api.get("/my-blogs");
+  return res.data;
+}
+
 // Get single blog by id
 export async function getBlogAPI(id) {
   const res = await api.get(`/blogs/${id}`);
