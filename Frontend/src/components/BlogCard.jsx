@@ -1,7 +1,7 @@
 export default function BlogCard({ image, category, title, date, onClick }) {
     return (
         <div 
-            className="bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-xl transition-shadow duration-300 max-w-sm"
+            className="w-full bg-white rounded-lg shadow-md overflow-hidden cursor-pointer hover:shadow-xl transition-shadow duration-300"
             onClick={onClick}
         >
             {/* Image Section */}

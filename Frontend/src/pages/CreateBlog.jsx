@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import BlogService from "../services/blogservice";
 
 const categories = [
   "Design",
@@ -14,11 +15,13 @@ const categories = [
 export default function CreateBlog() {
   const navigate = useNavigate();
   const [preview, setPreview] = useState("");
+  const [serverError, setServerError] = useState("");
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    setValue,
+    formState: { errors, isSubmitting },
   } = useForm({
     defaultValues: {
       category: "Design",
@@ -28,16 +31,30 @@ export default function CreateBlog() {
     },
   });
 
-  const onSubmit = (data) => {
-    console.log("Create blog", data);
-    navigate("/mycontains");
+  const onSubmit = async (data) => {
+    try {
+      setServerError("");
+      await BlogService.createBlog(data);
+      navigate("/mycontains");
+    } catch (error) {
+      const message =
+        error?.response?.data?.message ||
+        error?.message ||
+        "Failed to create blog";
+      setServerError(message);
+    }
   };
 
   const handleImageChange = (event) => {
     const file = event.target.files && event.target.files[0];
     if (file) {
-      const url = URL.createObjectURL(file);
-      setPreview(url);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const result = typeof reader.result === "string" ? reader.result : "";
+        setPreview(result);
+        setValue("image", result, { shouldValidate: true });
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -59,6 +76,11 @@ export default function CreateBlog() {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 px-6 py-6">
+          {serverError && (
+            <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+              {serverError}
+            </div>
+          )}
           <div className="grid gap-6 md:grid-cols-2">
             <div>
               <label className="block text-sm font-medium text-gray-700">Category</label>
@@ -140,9 +162,10 @@ export default function CreateBlog() {
             </button>
             <button
               type="submit"
+              disabled={isSubmitting}
               className="rounded-full bg-indigo-600 px-6 py-2 text-sm font-semibold text-white shadow-md hover:bg-indigo-700"
             >
-              Publish Blog
+              {isSubmitting ? "Publishing..." : "Publish Blog"}
             </button>
           </div>
         </form>

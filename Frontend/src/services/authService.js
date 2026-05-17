@@ -14,6 +14,8 @@ const AuthService = {
     console.log(response);
     return response;
   },
+  
+  // Logout user
   async logout() {
     const response = await logoutAPI();
     return response;
