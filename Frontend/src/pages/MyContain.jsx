@@ -91,7 +91,12 @@ export default function MyContain() {
           </div>
         )}
         {isLoading ? (
-          <p className="text-center text-sm text-gray-500">Loading blogs...</p>
+          <div className="flex flex-col items-center justify-center py-12 sm:py-20">
+            <div className="relative">
+              <div className="h-12 w-12 rounded-full border-4 border-gray-200 border-t-blue-500 animate-spin sm:h-16 sm:w-16"></div>
+            </div>
+            <p className="mt-4 text-sm text-gray-500">Loading amazing content...</p>
+          </div>
         ) : blogs.length === 0 ? (
           <p className="text-center text-sm text-gray-500">No blogs found.</p>
         ) : (
