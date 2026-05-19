@@ -8,7 +8,6 @@ import useStateContext from '../../context/useStateContext';
 import { useNavigate } from "react-router-dom";
 import { useState } from 'react';
 import { showErrorToast, showSuccessToast } from '../../components/ShowToast';
-import HeroBanner from "../../components/HeroBanner";
 
 const formSchema = z
   .object({
@@ -82,7 +81,6 @@ export default function Register() {
 
   return (
     <>
-      <HeroBanner title="Register" />
       <div className="min-h-screen flex items-center justify-center bg-linear-to-r from-indigo-500 to-purple-600">
 
         <form
