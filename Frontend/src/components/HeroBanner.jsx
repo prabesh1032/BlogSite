@@ -1,4 +1,5 @@
 import React from "react";
+import banner from "../assets/banner/banner.png";
 
 export default function HeroBanner({
   title = "My Blog",
@@ -9,14 +10,14 @@ export default function HeroBanner({
 
         {/* Banner Image */}
         <img
-          src="/banner/banner.jpg"
+          src={banner}
           alt={title}
           className="w-full h-full object-cover"
         />
 
         {/* Overlay */}
         <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-          <h1 className="chalk-text text-center px-4">
+          <h1 className="chalk-text text-center px-16 text-white text-3xl sm:text-4xl md:text-5xl font-bold">
             {title}
           </h1>
         </div>
