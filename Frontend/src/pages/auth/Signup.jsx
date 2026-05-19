@@ -8,6 +8,7 @@ import useStateContext from '../../context/useStateContext';
 import { useNavigate } from "react-router-dom";
 import { useState } from 'react';
 import { showErrorToast, showSuccessToast } from '../../components/ShowToast';
+import HeroBanner from "../../components/HeroBanner";
 
 const formSchema = z
   .object({
@@ -80,100 +81,103 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-linear-to-r from-indigo-500 to-purple-600">
+    <>
+      <HeroBanner title="Register" />
+      <div className="min-h-screen flex items-center justify-center bg-linear-to-r from-indigo-500 to-purple-600">
 
-      <form
-        onSubmit={handleSubmit(submitForm)}
-        className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md"
-      >
-        <h2 className="text-2xl font-bold text-center mb-6">Create Account</h2>
+        <form
+          onSubmit={handleSubmit(submitForm)}
+          className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md"
+        >
+          <h2 className="text-2xl font-bold text-center mb-6">Create Account</h2>
 
-        {/* Name */}
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">Name</label>
-          <input
-            {...register('name')}
-            placeholder="Enter your name"
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none"
-          />
-          {/* error message */}
-          {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>}
-        </div>
-
-        {/* Email */}
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">Email</label>
-          <input
-            {...register('email')}
-            placeholder="Enter your email"
-            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none"
-          />
-          {/* error message */}
-          {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
-        </div>
-
-        {/* Password */}
-        <div className="mb-4">
-          <label className="block text-sm font-medium mb-1">Password</label>
-          <div className="relative">
+          {/* Name */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-1">Name</label>
             <input
-              type={showPassword ? "text" : "password"}
-              {...register('password')}
-              placeholder="Enter password"
+              {...register('name')}
+              placeholder="Enter your name"
               className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none"
             />
-            <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute inset-y-0 right-0 px-3 flex items-center text-gray-500 cursor-pointer"
-            >
-              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-            </button>
+            {/* error message */}
+            {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>}
           </div>
-          {/* error message */}
-          {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
-        </div>
 
-        {/* Confirm Password */}
-        <div className="mb-6">
-          <label className="block text-sm font-medium mb-1">Confirm Password</label>
-          <div className="relative">
+          {/* Email */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-1">Email</label>
             <input
-              type={showConfirmPassword ? "text" : "password"}
-              {...register('password_confirmation')}
-              placeholder="Confirm password"
-              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none cursor-pointer"
+              {...register('email')}
+              placeholder="Enter your email"
+              className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none"
             />
-            <button
-              type="button"
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute inset-y-0 right-0 px-3 flex items-center text-gray-500"
-            >
-              {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-            </button>
+            {/* error message */}
+            {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
           </div>
-          {/* error message */}
-          {errors.password_confirmation && <p className="text-red-500 text-sm mt-1">{errors.password_confirmation.message}</p>}
-        </div>
 
-        {/* Server Error */}
-{serverError && (
-  <p className="text-red-500 text-sm mb-4 text-center">
-    {serverError}
-  </p>
-)}
+          {/* Password */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium mb-1">Password</label>
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                {...register('password')}
+                placeholder="Enter password"
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-0 px-3 flex items-center text-gray-500 cursor-pointer"
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
+            {/* error message */}
+            {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>}
+          </div>
 
-{/* Button */}
-<button
-  type="submit"
-  disabled={loading}
-  className="w-full bg-indigo-600 text-white py-2 rounded-lg font-semibold hover:bg-indigo-700 transition disabled:opacity-60 disabled:cursor-not-allowed"
->
-  {loading ? "Registering..." : "Register"}
-</button>
+          {/* Confirm Password */}
+          <div className="mb-6">
+            <label className="block text-sm font-medium mb-1">Confirm Password</label>
+            <div className="relative">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                {...register('password_confirmation')}
+                placeholder="Confirm password"
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-400 outline-none cursor-pointer"
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute inset-y-0 right-0 px-3 flex items-center text-gray-500"
+              >
+                {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
+            {/* error message */}
+            {errors.password_confirmation && <p className="text-red-500 text-sm mt-1">{errors.password_confirmation.message}</p>}
+          </div>
+
+          {/* Server Error */}
+          {serverError && (
+            <p className="text-red-500 text-sm mb-4 text-center">
+              {serverError}
+            </p>
+          )}
+
+          {/* Button */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-indigo-600 text-white py-2 rounded-lg font-semibold hover:bg-indigo-700 transition disabled:opacity-60 disabled:cursor-not-allowed"
+          >
+            {loading ? "Registering..." : "Register"}
+          </button>
 
 
-      </form>
-    </div>
+        </form>
+      </div>
+    </>
   );
 }

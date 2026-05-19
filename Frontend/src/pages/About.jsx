@@ -1,10 +1,15 @@
 import React from 'react'
+import HeroBanner from "../components/HeroBanner";
 
 function About() {
   return (
-    <div>About
-      <p>This is the about page.</p>
-    </div>
+    <>
+      <HeroBanner title="About" />
+      <div>
+        About
+        <p>This is the about page.</p>
+      </div>
+    </>
     
   )
 }

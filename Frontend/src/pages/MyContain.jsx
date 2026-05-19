@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import BlogCard from "../components/BlogCard";
 import BlogService from "../services/blogService";
 import LoadMore from "../components/LoadMore";
+import HeroBanner from "../components/HeroBanner";
 
 const BLOGS_PER_PAGE = 6;
 
@@ -72,15 +73,7 @@ export default function MyContain() {
 
   return (
     <section className="bg-gray-50 min-h-screen">
-      <div className="relative w-full h-40 md:h-48 ">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?w=1600&h=600&fit=crop')] bg-cover bg-center opacity-50" />
-        <div className="relative max-w-7xl mx-auto h-full px-4 flex items-center">
-          <div className="text-black">
-            <p className="text-xs tracking-[0.35em] uppercase text-black/80">My Space</p>
-            <h1 className="text-3xl md:text-4xl font-bold">My Articles</h1>
-          </div>
-        </div>
-      </div>
+      <HeroBanner title="My Articles" />
 
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="flex flex-col md:flex-row md:items-center md:justify-end gap-4 mb-10">

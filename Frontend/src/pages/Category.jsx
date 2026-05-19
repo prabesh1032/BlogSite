@@ -4,6 +4,7 @@ import BlogCard from "../components/BlogCard";
 import BlogService from "../services/blogService";
 import LoadMore from "../components/LoadMore";
 import useStateContext from "../context/useStateContext";
+import HeroBanner from "../components/HeroBanner";
 
 const BLOGS_PER_PAGE = 6;
 
@@ -140,15 +141,7 @@ export default function Category() {
 
   return (
     <section className="bg-gray-50 min-h-screen">
-      <div className="relative w-full h-40 md:h-48">
-        <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1600&h=600&fit=crop')] bg-cover bg-center opacity-50" />
-        <div className="relative max-w-7xl mx-auto h-full px-4 flex items-center">
-          <div className="text-black">
-            <p className="text-xs tracking-[0.35em] uppercase text-black/80">Category</p>
-            <h1 className="text-3xl md:text-4xl font-bold">{pageTitle} Blogs</h1>
-          </div>
-        </div>
-      </div>
+      <HeroBanner title={`${pageTitle} Blogs`} />
 
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-10">
