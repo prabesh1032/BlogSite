@@ -39,7 +39,7 @@ export default function BlogCard({
                                 event.stopPropagation();
                                 onToggleLike?.();
                             }}
-                            className={`flex h-10 w-10 items-center justify-center rounded-full border shadow-sm transition-all duration-300 ${
+                            className={`flex h-10 w-10 items-center justify-center rounded-full border shadow-sm transition-all duration-300 cursor-pointer ${
                                 isLiked
                                     ? "border-red-200 bg-red-500 text-white"
                                     : "border-white/70 bg-white/90 text-gray-700 hover:bg-white"
@@ -55,7 +55,7 @@ export default function BlogCard({
                                 event.stopPropagation();
                                 onToggleBookmark?.();
                             }}
-                            className={`flex h-10 w-10 items-center justify-center rounded-full border shadow-sm transition-all duration-300 ${
+                            className={`flex h-10 w-10 items-center justify-center rounded-full border shadow-sm transition-all duration-300 cursor-pointer ${
                                 isBookmarked
                                     ? "border-amber-200 bg-amber-500 text-white"
                                     : "border-white/70 bg-white/90 text-gray-700 hover:bg-white"
