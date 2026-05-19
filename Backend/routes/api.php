@@ -16,14 +16,14 @@ Route::post('/signup', [AuthController::class, 'signup']);
 Route::post('/logout', [AuthController::class, 'logout']);
 
 Route::get('/blogs', [BlogController::class, 'index']);
-Route::get('/blogs/{id}', [BlogController::class, 'show']);
+Route::get('/blogs/{blog}', [BlogController::class, 'show']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/my-blogs', [BlogController::class, 'myBlogs']);
     Route::post('/blogs', [BlogController::class, 'store']);
-    Route::put('/blogs/{id}', [BlogController::class, 'update']);
-    Route::patch('/blogs/{id}', [BlogController::class, 'update']);
-    Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
+    Route::put('/blogs/{blog}', [BlogController::class, 'update']);
+    Route::patch('/blogs/{blog}', [BlogController::class, 'update']);
+    Route::delete('/blogs/{blog}', [BlogController::class, 'destroy']);
     // Profile endpoints
     Route::get('/user/profile', [ProfileController::class, 'show']);
     Route::match(['put','patch'], '/user/profile', [ProfileController::class, 'update']);

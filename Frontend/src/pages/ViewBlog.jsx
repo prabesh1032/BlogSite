@@ -17,7 +17,7 @@ const getBlogImageUrl = (image) => {
 };
 
 export default function ViewBlog() {
-  const { id } = useParams();
+  const { slug } = useParams();
   const navigate = useNavigate();
   const { user, token, setUser } = useStateContext();
 
@@ -41,7 +41,7 @@ export default function ViewBlog() {
         setActionError("");
         setIsLoading(true);
 
-        const data = await BlogService.getBlog(id);
+        const data = await BlogService.getBlog(slug);
         if (isMounted) {
           setBlog(data?.blog || null);
         }
@@ -69,7 +69,7 @@ export default function ViewBlog() {
     return () => {
       isMounted = false;
     };
-  }, [id, token, user?.id, setUser]);
+  }, [slug, token, user?.id, setUser]);
 
   const formatDate = (value) => {
     if (!value) return "";

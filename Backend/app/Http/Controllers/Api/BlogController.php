@@ -57,18 +57,25 @@ class BlogController extends Controller
         ]);
     }
 
-    public function show($id)
+    public function show($blog)
     {
-        $blog = Blog::with('user.profile')->findOrFail($id);
+        $blog = Blog::with('user.profile')
+            ->where('slug', $blog)
+            ->orWhere('id', $blog)
+            ->firstOrFail();
 
         return response()->json([
             'blog' => $blog
         ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $blog)
     {
-        $blog = Blog::where('user_id', $request->user()->id)->findOrFail($id);
+        $blog = Blog::where('user_id', $request->user()->id)
+            ->where(function ($query) use ($blog) {
+                $query->where('slug', $blog)->orWhere('id', $blog);
+            })
+            ->firstOrFail();
 
         $data = $request->validate([
             'title' => 'required|string|max:255',
@@ -95,9 +102,13 @@ class BlogController extends Controller
         ]);
     }
 
-    public function destroy($id)
+    public function destroy($blog)
     {
-        $blog = Blog::where('user_id', request()->user()->id)->findOrFail($id);
+        $blog = Blog::where('user_id', request()->user()->id)
+            ->where(function ($query) use ($blog) {
+                $query->where('slug', $blog)->orWhere('id', $blog);
+            })
+            ->firstOrFail();
 
         if ($blog->image && Storage::disk('public')->exists($blog->image)) {
             Storage::disk('public')->delete($blog->image);

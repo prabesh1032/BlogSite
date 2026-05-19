@@ -136,7 +136,7 @@ export default function Home() {
     return (
         <>
             <Hero />
-            
+
             {/* Blog Cards Section */}
             <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-linear-to-b from-gray-50 to-white">
                 <div className="max-w-7xl mx-auto">
@@ -152,7 +152,7 @@ export default function Home() {
                                 : "Discover insights, tutorials, and stories from our community"}
                         </p>
                     </div>
-                    
+
                     {/* Error Message */}
                     {error && (
                         <div className="mb-8 rounded-xl border border-red-200 bg-linear-to-r from-red-50 to-red-100 px-4 sm:px-6 py-3 sm:py-4 text-sm text-red-700 shadow-sm">
@@ -164,7 +164,7 @@ export default function Home() {
                             </div>
                         </div>
                     )}
-                    
+
                     {/* Loading State */}
                     {isLoading && (
                         <div className="flex flex-col items-center justify-center py-12 sm:py-20">
@@ -174,7 +174,7 @@ export default function Home() {
                             <p className="mt-4 text-sm text-gray-500">Loading amazing content...</p>
                         </div>
                     )}
-                    
+
                     {/* Empty State */}
                     {!isLoading && blogs.length === 0 && !error && (
                         <div className="text-center py-12 sm:py-20">
@@ -187,7 +187,7 @@ export default function Home() {
                             <p className="text-gray-500">Check back soon for new content!</p>
                         </div>
                     )}
-                    
+
                     {/* Blog Cards Grid */}
                     {!isLoading && filteredBlogs.length > 0 && (
                         <>
@@ -205,7 +205,7 @@ export default function Home() {
                                             date={formatDate(blog.created_at)}
                                             authorName={blog.user?.name || "Author"}
                                             authorImage={blog.user?.profile?.profile_pic ? getBlogImageUrl(blog.user.profile.profile_pic) : undefined}
-                                            onClick={() => navigate(`/blog/${blog.id}`)}
+                                            onClick={() => navigate(`/blog/${blog.slug || blog.id}`)}
                                             showActions
                                             isLiked={Boolean(likedBlogs[blog.id])}
                                             isBookmarked={Boolean(bookmarkedBlogs[blog.id])}
@@ -215,7 +215,7 @@ export default function Home() {
                                     </div>
                                 ))}
                             </div>
-                            
+
                             {canLoadMore && (
                                 <div className="text-center mt-12 sm:mt-16">
                                     <LoadMore onClick={() => setVisibleCount((count) => count + BLOGS_PER_PAGE)}>
