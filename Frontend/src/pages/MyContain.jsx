@@ -3,6 +3,15 @@ import { useNavigate } from "react-router-dom";
 import BlogCard from "../components/BlogCard";
 import BlogService from "../services/blogService";
 
+const getBlogImageUrl = (image) => {
+  if (!image) return "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=1200&h=800&fit=crop";
+  if (image.startsWith("http") || image.startsWith("blob:") || image.startsWith("data:")) {
+    return image;
+  }
+
+  return `${import.meta.env.VITE_APP_API_BASE_URL}/storage/${image}`;
+};
+
 export default function MyContain() {
   const navigate = useNavigate();
   const [blogs, setBlogs] = useState([]);
@@ -53,9 +62,6 @@ export default function MyContain() {
       .toUpperCase();
   };
 
-  const fallbackImage =
-    "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&h=400&fit=crop";
-
   return (
     <section className="bg-gray-50 min-h-screen">
       <div className="relative w-full h-40 md:h-48 ">
@@ -91,15 +97,25 @@ export default function MyContain() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
             {blogs.map((blog) => (
-              <BlogCard
-                key={blog.id}
-                image={blog.image || fallbackImage}
-                category={(blog.category || "").toUpperCase()}
-                title={blog.title}
-                date={formatDate(blog.created_at)}
-                authorName={blog.user?.name || "Author"}
-                onClick={() => navigate(`/blog/${blog.id}`)}
-              />
+              <div key={blog.id} className="w-full">
+                <BlogCard
+                  image={getBlogImageUrl(blog.image)}
+                  category={(blog.category || "").toUpperCase()}
+                  title={blog.title}
+                  date={formatDate(blog.created_at)}
+                  authorName={blog.user?.name || "Author"}
+                  onClick={() => navigate(`/blog/${blog.id}`)}
+                />
+                <div className="mt-3 flex justify-end">
+                  <button
+                    type="button"
+                    onClick={() => navigate("/mycontains/editblog", { state: { blog } })}
+                    className="rounded-full border border-gray-200 px-4 py-2 text-xs font-semibold text-gray-600 transition hover:border-indigo-300 hover:text-indigo-600"
+                  >
+                    Edit Blog
+                  </button>
+                </div>
+              </div>
             ))}
           </div>
         )}

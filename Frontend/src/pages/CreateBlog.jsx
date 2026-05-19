@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import BlogService from "../services/blogservice";
+import BlogService from "../services/blogService";
 
 const categories = [
   "Design",
@@ -35,7 +35,16 @@ export default function CreateBlog() {
   const onSubmit = async (data) => {
     try {
       setServerError("");
-      await BlogService.createBlog(data);
+      const payload = new FormData();
+      payload.append("title", data.title);
+      payload.append("category", data.category);
+      payload.append("description", data.description);
+
+      if (data.image instanceof File) {
+        payload.append("image", data.image);
+      }
+
+      await BlogService.createBlog(payload);
       navigate("/mycontains");
     } catch (error) {
       const message =
@@ -49,14 +58,10 @@ export default function CreateBlog() {
   const handleImageChange = (event) => {
     const file = event.target.files && event.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const result = typeof reader.result === "string" ? reader.result : "";
-        setPreview(result);
-        setValue("image", result, { shouldValidate: true, shouldDirty: true });
-        clearErrors("image");
-      };
-      reader.readAsDataURL(file);
+      const objectUrl = URL.createObjectURL(file);
+      setPreview(objectUrl);
+      setValue("image", file, { shouldValidate: true, shouldDirty: true });
+      clearErrors("image");
     }
   };
 

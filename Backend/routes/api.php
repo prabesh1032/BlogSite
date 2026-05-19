@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BlogController;
+use App\Http\Controllers\Api\ProfileController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,4 +24,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/blogs/{id}', [BlogController::class, 'update']);
     Route::patch('/blogs/{id}', [BlogController::class, 'update']);
     Route::delete('/blogs/{id}', [BlogController::class, 'destroy']);
+    // Profile endpoints
+    Route::get('/user/profile', [ProfileController::class, 'show']);
+    Route::match(['put','patch'], '/user/profile', [ProfileController::class, 'update']);
 });

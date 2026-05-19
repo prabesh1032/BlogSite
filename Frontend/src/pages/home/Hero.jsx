@@ -1,6 +1,7 @@
 import React from "react";
 import bg1 from "../../assets/bg1.jpg";
 import blog1 from "../../assets/blog1.jpg";
+import autherimg from "../../assets/useravatar/useravatar.avif";
 
 const Hero = () => {
   return (
@@ -40,7 +41,7 @@ const Hero = () => {
 
             <div className="flex items-center gap-3 text-white text-xs">
               <img
-                src="/author.jpg"
+                src={autherimg}
                 alt="Author"
                 className="w-8 h-8 rounded-full object-cover"
               />

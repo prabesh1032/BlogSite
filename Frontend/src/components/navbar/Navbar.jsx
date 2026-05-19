@@ -3,6 +3,7 @@ import Navlinks from "./navlinks";
 import { FaSearch } from "react-icons/fa";
 import { Menu, X } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import logo from "../../assets/logo/typetheory.png";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -23,7 +24,7 @@ export default function Navbar() {
   }, [location]);
 
   return (
-    <nav className={`w-full px-4 sm:px-6 lg:px-8 py-5 sm:py-6 transition-all duration-300 sticky top-0 z-50 ${
+    <nav className={`w-full px-4 sm:px-6 lg:px-8 py-1 sm:py-2 transition-all duration-300 sticky top-0 z-50 ${
       scrolled 
         ? "bg-white/95 backdrop-blur-md shadow-lg" 
         : "bg-white shadow-sm"
@@ -31,11 +32,14 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="group">
-            <div className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent hover:from-gray-800 hover:to-gray-500 transition-all duration-300">
-              TypeTheory
+          <Link to="/" className="group flex items-center">
+            <div className="bg-black rounded-full p-1">
+              <img 
+                src={logo} 
+                alt="TypeTheory Logo" 
+                className="h-16 sm:h-20 w-auto object-contain hover:opacity-80 transition-opacity duration-300" 
+              />
             </div>
-            <div className="h-0.5 w-0 group-hover:w-full bg-gradient-to-r from-blue-500 to-purple-600 transition-all duration-300"></div>
           </Link>
 
           {/* Desktop Links */}

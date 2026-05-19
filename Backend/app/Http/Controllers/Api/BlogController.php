@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Blog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class BlogController extends Controller
@@ -20,23 +21,21 @@ class BlogController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $data = $request->validate([
             'title' => 'required|string|max:255',
             'category' => 'required|string|max:255',
             'description' => 'required|string',
-            'image' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
-        $user = $request->user();
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('blogs', 'public');
+        }
 
-        $blog = Blog::create([
-            'user_id' => $user?->id,
-            'title' => $request->title,
-            'category' => $request->category,
-            'description' => $request->description,
-            'image' => $request->image,
-            'slug' => Str::slug($request->title),
-        ]);
+        $data['user_id'] = $request->user()?->id;
+        $data['slug'] = Str::slug($data['title']) . '-' . time();
+
+        $blog = Blog::create($data);
 
         $blog->load('user:id,name');
 
@@ -71,30 +70,38 @@ class BlogController extends Controller
     {
         $blog = Blog::where('user_id', $request->user()->id)->findOrFail($id);
 
-        $request->validate([
+        $data = $request->validate([
             'title' => 'required|string|max:255',
             'category' => 'required|string|max:255',
             'description' => 'required|string',
-            'image' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
         ]);
 
-        $blog->update([
-            'title' => $request->title,
-            'category' => $request->category,
-            'description' => $request->description,
-            'image' => $request->image,
-            'slug' => Str::slug($request->title),
-        ]);
+        if ($request->hasFile('image')) {
+            if ($blog->image && Storage::disk('public')->exists($blog->image)) {
+                Storage::disk('public')->delete($blog->image);
+            }
+
+            $data['image'] = $request->file('image')->store('blogs', 'public');
+        }
+
+        $data['slug'] = Str::slug($data['title']) . '-' . time();
+
+        $blog->update($data);
 
         return response()->json([
             'message' => 'Blog updated successfully',
-            'blog' => $blog
+            'blog' => $blog->fresh()->load('user:id,name')
         ]);
     }
 
     public function destroy($id)
     {
         $blog = Blog::where('user_id', request()->user()->id)->findOrFail($id);
+
+        if ($blog->image && Storage::disk('public')->exists($blog->image)) {
+            Storage::disk('public')->delete($blog->image);
+        }
 
         $blog->delete();
 
