@@ -96,7 +96,7 @@ export default function Navlinks({ isMobile = false, onNavigate }) {
                     showDropdown ? "text-gray-900" : "text-gray-600 hover:text-gray-900"
                   }`}
                 >
-                  <span className="text-base sm:text-lg">Categories</span>
+                  <span className="text-base sm:text-lg cursor-pointer">Categories</span>
                   <span
                     className={`text-xs transition-transform duration-300 ${
                       showDropdown ? "rotate-180" : ""

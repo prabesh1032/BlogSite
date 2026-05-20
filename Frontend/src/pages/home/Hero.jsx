@@ -1,6 +1,6 @@
 import React from "react";
 import blog1 from "../../assets/blog1.jpg";
-import autherimg from "../../assets/useravatar/useravatar.avif";
+import autherimg from "../../assets/useravatar/prabesh2.jpg";
 
 const Hero = () => {
   const sidePosts = [
@@ -46,12 +46,12 @@ const Hero = () => {
           <div className="flex items-center gap-3 mb-8">
             <img
               src={autherimg}
-              alt="Jonathan Smith"
+              alt="Prabesh Acharya"
               className="w-9 h-9 rounded-full object-cover"
             />
             <div>
-              <p className="text-sm font-medium text-gray-900">Jonathan Smith</p>
-              <p className="text-xs text-gray-500">June 02, 2018 · 6 min read</p>
+              <p className="text-sm font-medium text-gray-900">Prabesh Acharya</p>
+              <p className="text-xs text-gray-500">May 02, 2026 · 6 min read</p>
             </div>
           </div>
 

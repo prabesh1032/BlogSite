@@ -88,7 +88,7 @@ export default function CreateBlog() {
             <button
               type="button"
               onClick={() => navigate("/mycontains")}
-              className="text-sm font-semibold text-gray-500 hover:text-gray-900"
+              className="text-sm font-semibold text-gray-500 hover:text-gray-900 cursor-pointer"
               aria-label="Close"
             >
               <X className="h-5 w-5 text-red-500" />
@@ -203,14 +203,14 @@ export default function CreateBlog() {
               <button
                 type="button"
                 onClick={() => navigate("/mycontains")}
-                className="rounded-full border border-gray-200 px-6 py-2 text-sm font-semibold text-gray-600 hover:text-gray-900"
+                className="rounded-full border border-gray-200 px-6 py-2 text-sm font-semibold text-gray-600 hover:text-gray-900 cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="rounded-full bg-indigo-600 px-6 py-2 text-sm font-semibold text-white shadow-md hover:bg-indigo-700"
+                className="rounded-full bg-indigo-600 px-6 py-2 text-sm font-semibold text-white shadow-md hover:bg-indigo-700 cursor-pointer disabled:bg-indigo-400 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? "Publishing..." : "Publish Blog"}
               </button>

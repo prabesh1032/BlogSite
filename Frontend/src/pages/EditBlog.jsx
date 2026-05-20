@@ -111,7 +111,7 @@ export default function EditBlog() {
             <button
               type="button"
               onClick={() => navigate("/mycontains")}
-              className="text-sm font-semibold text-gray-500 hover:text-gray-900"
+              className="text-sm font-semibold text-gray-500 hover:text-gray-900 cursor-pointer"
               aria-label="Close"
             >
               <X className="h-5 w-5 text-red-500" />

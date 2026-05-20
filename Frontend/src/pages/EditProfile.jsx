@@ -102,7 +102,7 @@ export default function EditProfile() {
             <button
               type="button"
               onClick={() => navigate("/profile")}
-              className="text-sm font-semibold text-gray-500 hover:text-gray-900"
+              className="text-sm font-semibold text-gray-500 hover:text-gray-900 cursor-pointer"
               aria-label="Close"
             >
               <X className="h-5 w-5 text-red-500" />
@@ -204,14 +204,14 @@ export default function EditProfile() {
               <button
                 type="button"
                 onClick={() => navigate("/profile")}
-                className="flex-1 px-6 py-3 rounded-lg border border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition-colors duration-300"
+                className="flex-1 px-6 py-3 rounded-lg border border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition-colors duration-300 cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="flex-1 px-6 py-3 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors duration-300 disabled:bg-blue-400 disabled:cursor-not-allowed"
+                className="flex-1 px-6 py-3 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors duration-300 disabled:bg-blue-400 disabled:cursor-not-allowed cursor-pointer"
               >
                 {isSubmitting ? "Saving..." : "Save Changes"}
               </button>

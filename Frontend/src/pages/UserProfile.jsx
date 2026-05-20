@@ -28,7 +28,7 @@ export default function UserProfile() {
             <button
               type="button"
               onClick={() => navigate("/")}
-              className="text-sm font-semibold text-gray-500 hover:text-gray-900"
+              className="text-sm font-semibold text-gray-500 hover:text-gray-900 cursor-pointer"
               aria-label="Close"
             >
               <X className="h-5 w-5 text-red-500" />
@@ -88,7 +88,7 @@ export default function UserProfile() {
               <button
                 type="button"
                 onClick={() => navigate("/")}
-                className="flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-lg border border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition-colors duration-300"
+                className="flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-lg border border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition-colors duration-300 cursor-pointer"
               >
                 <X className="h-4 w-4 text-red-500" />
                 Close
@@ -96,7 +96,7 @@ export default function UserProfile() {
               <button
                 type="button"
                 onClick={() => navigate("/profile/edit")}
-                className="flex-1 px-6 py-3 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors duration-300"
+                className="flex-1 px-6 py-3 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors duration-300 cursor-pointer"
               >
                 Edit Profile
               </button>
