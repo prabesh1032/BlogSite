@@ -6,6 +6,7 @@ import AuthService from "../services/authService";
 import defaultAvatar from "../assets/useravatar/useravatar.avif";
 import { showErrorToast, showSuccessToast } from "../components/ShowToast";
 import HeroBanner from "../components/HeroBanner";
+import { Camera, X } from "lucide-react";
 
 export default function EditProfile() {
   const navigate = useNavigate();
@@ -102,8 +103,9 @@ export default function EditProfile() {
               type="button"
               onClick={() => navigate("/profile")}
               className="text-sm font-semibold text-gray-500 hover:text-gray-900"
+              aria-label="Close"
             >
-              Close
+              <X className="h-5 w-5 text-red-500" />
             </button>
           </div>
 
@@ -115,26 +117,29 @@ export default function EditProfile() {
             )}
 
             {/* Profile Picture Upload */}
-            <div className="flex flex-col items-center space-y-4">
+            <div className="flex flex-col items-center space-y-3">
               <div className="relative">
                 <img
                   src={preview}
                   alt="Profile preview"
                   className="h-24 w-24 sm:h-32 sm:w-32 rounded-full object-cover border-4 border-blue-100 shadow-lg"
                 />
-              </div>
-              <div className="w-full max-w-xs">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Profile Picture
-                </label>
                 <input
+                  id="profile-image-input"
                   type="file"
                   accept="image/*"
                   onChange={handleImageChange}
-                  className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-sm"
+                  className="hidden"
                 />
-                <p className="text-xs text-gray-500 mt-1">PNG, JPG, GIF up to 2MB</p>
+                <label
+                  htmlFor="profile-image-input"
+                  className="absolute bottom-1 right-1 flex h-9 w-9 items-center justify-center rounded-full bg-white shadow-md cursor-pointer"
+                  aria-label="Change profile picture"
+                >
+                  <Camera className="h-4 w-4 text-gray-700" />
+                </label>
               </div>
+              <p className="text-xs text-gray-500">PNG, JPG, GIF up to 2MB</p>
             </div>
 
             {/* Name Field */}

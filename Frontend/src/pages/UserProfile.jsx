@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import useStateContext from "../context/useStateContext";
 import defaultAvatar from "../assets/useravatar/useravatar.avif";
 import HeroBanner from "../components/HeroBanner";
+import { X } from "lucide-react";
 
 export default function UserProfile() {
   const navigate = useNavigate();
@@ -28,8 +29,9 @@ export default function UserProfile() {
               type="button"
               onClick={() => navigate("/")}
               className="text-sm font-semibold text-gray-500 hover:text-gray-900"
+              aria-label="Close"
             >
-              Close
+              <X className="h-5 w-5 text-red-500" />
             </button>
           </div>
 
@@ -86,8 +88,9 @@ export default function UserProfile() {
               <button
                 type="button"
                 onClick={() => navigate("/")}
-                className="flex-1 px-6 py-3 rounded-lg border border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition-colors duration-300"
+                className="flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-lg border border-gray-300 text-gray-700 font-semibold hover:bg-gray-50 transition-colors duration-300"
               >
+                <X className="h-4 w-4 text-red-500" />
                 Close
               </button>
               <button
