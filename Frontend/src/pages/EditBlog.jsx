@@ -14,15 +14,7 @@ export default function EditBlog() {
   const location = useLocation();
   const selectedBlog = location.state?.blog;
 
-  const fallbackBlog = {
-    id: null,
-    category: "Technology",
-    title: "The Future of Web Development in 2026.",
-    description: "This is a static edit page. Replace this with real content later.",
-    image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&h=400&fit=crop",
-  };
-
-  const blog = selectedBlog ?? fallbackBlog;
+  const blog = selectedBlog ?? null;
   const [uploadedPreview, setUploadedPreview] = useState("");
   const [serverError, setServerError] = useState("");
 
@@ -44,18 +36,18 @@ export default function EditBlog() {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      category: blog.category,
-      title: blog.title,
-      description: blog.description,
+      category: blog?.category || categories[0],
+      title: blog?.title || "",
+      description: blog?.description || "",
       image: null,
     },
   });
 
   useEffect(() => {
     reset({
-      category: blog.category,
-      title: blog.title,
-      description: blog.description,
+      category: blog?.category || categories[0],
+      title: blog?.title || "",
+      description: blog?.description || "",
       image: null,
     });
   }, [blog, reset]);
@@ -66,6 +58,12 @@ export default function EditBlog() {
   const onSubmit = async (data) => {
     try {
       setServerError("");
+      if (!blog?.id) {
+        const message = "No blog selected for editing.";
+        setServerError(message);
+        showErrorToast(message);
+        return;
+      }
 
       const payload = new FormData();
       payload.append("title", data.title);
