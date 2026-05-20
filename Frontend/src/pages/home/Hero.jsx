@@ -1,13 +1,24 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import blog1 from "../../assets/blog1.jpg";
 import autherimg from "../../assets/useravatar/prabesh2.jpg";
 
-const Hero = () => {
-  const sidePosts = [
-    { num: "01", category: "Culture", title: "The Rise of Ambient Sounds in Productivity Culture" },
-    { num: "02", category: "Wellness", title: "How Listening Habits Shape Our Emotional Wellbeing" },
-    { num: "03", category: "Tech", title: "Spotify's Algorithm Knows You Better Than You Think" },
-  ];
+const Hero = ({ oldestBlogs = [] }) => {
+  const sidePosts = oldestBlogs.map((blog, index) => ({
+    id: blog.id,
+    slug: blog.slug,
+    num: String(index + 1).padStart(2, "0"),
+    category: blog.category || "General",
+    title: blog.title || "Untitled",
+  }));
+
+  const handleReadLatest = (event) => {
+    event.preventDefault();
+    const target = document.getElementById("latest-articles");
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
 
   return (
     <section className="bg-[#f7f4ef] py-16 px-6 min-h-145 flex items-center justify-center font-sans">
@@ -36,7 +47,8 @@ const Hero = () => {
 
           {/* CTA */}
           <a
-            href="#"
+            href="#latest-articles"
+            onClick={handleReadLatest}
             className="inline-flex items-center gap-2 text-sm font-medium text-gray-900 border border-gray-900 px-5 py-2.5 rounded-sm hover:bg-gray-900 hover:text-[#f7f4ef] transition-colors mb-6"
           >
             Read article →
@@ -57,9 +69,13 @@ const Hero = () => {
 
           {/* Side posts */}
           <div className="border-t border-[#d9d3c9]">
+            {sidePosts.length === 0 && (
+              <div className="py-4 text-sm text-gray-500">No articles yet.</div>
+            )}
             {sidePosts.map((post) => (
-              <div
-                key={post.num}
+              <Link
+                key={`${post.num}-${post.id}`}
+                to={`/blog/${post.slug || post.id}`}
                 className="flex items-center gap-4 py-3.5 border-b border-[#d9d3c9] cursor-pointer group"
               >
                 <span className="font-serif text-2xl font-bold text-[#d9d3c9] leading-none min-w-7">
@@ -73,7 +89,7 @@ const Hero = () => {
                     {post.title}
                   </p>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>

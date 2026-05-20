@@ -17,6 +17,11 @@ const getBlogImageUrl = (image) => {
     return `${import.meta.env.VITE_APP_API_BASE_URL}/storage/${image}`;
 };
 
+const getDateValue = (value) => {
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? 0 : date.getTime();
+};
+
 export default function Home() {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
@@ -133,12 +138,22 @@ export default function Home() {
     const visibleBlogs = filteredBlogs.slice(0, visibleCount);
     const canLoadMore = visibleCount < filteredBlogs.length;
 
+    const oldestBlogs = useMemo(() => {
+        if (!blogs.length) return [];
+        return [...blogs]
+            .sort((a, b) => getDateValue(a.created_at) - getDateValue(b.created_at))
+            .slice(0, 3);
+    }, [blogs]);
+
     return (
         <>
-            <Hero />
+            <Hero oldestBlogs={oldestBlogs} />
 
             {/* Blog Cards Section */}
-            <section className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-linear-to-b from-gray-50 to-white">
+            <section
+                id="latest-articles"
+                className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-linear-to-b from-gray-50 to-white"
+            >
                 <div className="max-w-7xl mx-auto">
                     {/* Section Header */}
                     <div className="text-center mb-10 sm:mb-12 md:mb-16">
