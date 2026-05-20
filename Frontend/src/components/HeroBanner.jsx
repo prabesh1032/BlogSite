@@ -17,7 +17,7 @@ export default function HeroBanner({
 
         {/* Overlay */}
         <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-          <h1 className="chalk-text text-center px-16 text-white text-3xl sm:text-4xl md:text-5xl font-bold">
+          <h1 className="chalk-text text-white text-3xl md:text-4xl lg:text-5xl font-semibold text-center px-16">
             {title}
           </h1>
         </div>
