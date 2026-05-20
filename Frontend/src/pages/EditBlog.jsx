@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useWatch } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -30,7 +31,7 @@ export default function EditBlog() {
       ? blog.image.startsWith("http") || blog.image.startsWith("blob:") || blog.image.startsWith("data:")
         ? blog.image
         : `${import.meta.env.VITE_APP_API_BASE_URL}/storage/${blog.image}`
-      : "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&h=400&fit=crop";
+      : null;
 
   const {
     register,
@@ -39,6 +40,7 @@ export default function EditBlog() {
     reset,
     setValue,
     clearErrors,
+    trigger,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -58,6 +60,8 @@ export default function EditBlog() {
     });
   }, [blog, reset]);
   const category = useWatch({ control, name: "category" });
+  const imageRegister = register("image");
+  const [selectedFileName, setSelectedFileName] = useState("");
 
   const onSubmit = async (data) => {
     try {
@@ -110,8 +114,9 @@ export default function EditBlog() {
               type="button"
               onClick={() => navigate("/mycontains")}
               className="text-sm font-semibold text-gray-500 hover:text-gray-900"
+              aria-label="Close"
             >
-              Close
+              <X className="h-5 w-5 text-red-500" />
             </button>
           </div>
 
@@ -121,6 +126,7 @@ export default function EditBlog() {
                 {serverError}
               </div>
             )}
+
             <div className="grid gap-6 md:grid-cols-2">
               <div>
                 <CategoryDropdown
@@ -165,24 +171,53 @@ export default function EditBlog() {
             <div>
               <label className="block text-sm font-medium text-gray-700">Cover Image</label>
               <div className="mt-2 flex flex-col gap-4 md:flex-row md:items-center">
-                <input
-                  type="file"
-                  accept="image/*"
-                  {...register("image")}
-                  onChange={handleImageChange}
-                  className="w-full rounded-lg border border-gray-200 px-4 py-2"
-                />
-                {uploadedPreview || existingPreview ? (
-                  <img
-                    src={uploadedPreview || existingPreview}
-                    alt="Preview"
-                    className="h-24 w-36 rounded-lg object-cover"
+                <div className="flex items-center gap-3">
+                  <input
+                    id="edit-image-input"
+                    type="file"
+                    accept="image/*"
+                    {...imageRegister}
+                    onChange={async (e) => {
+                      if (imageRegister.onChange) imageRegister.onChange(e);
+                      handleImageChange(e);
+                      const f = e.target.files && e.target.files[0];
+                      setSelectedFileName(f ? f.name : "");
+                      await trigger("image");
+                    }}
+                    className="hidden"
                   />
-                ) : (
-                  <div className="flex h-24 w-36 items-center justify-center rounded-lg border border-dashed border-gray-300 text-xs text-gray-500">
-                    Preview
-                  </div>
-                )}
+                  <label
+                    htmlFor="edit-image-input"
+                    className="inline-flex items-center gap-2 rounded-md border border-dashed border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 cursor-pointer"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1M12 12v9m0-9l3 3m-3-3-3 3M7 8h.01M12 8h.01M17 8h.01M12 3v3" />
+                    </svg>
+                    Change image
+                  </label>
+
+                  {(uploadedPreview || existingPreview) ? (
+                    <div className="relative">
+                      <img src={uploadedPreview || existingPreview} alt="Preview" className="h-28 w-40 rounded-md object-cover border" />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setUploadedPreview("");
+                          setValue("image", null, { shouldDirty: true, shouldValidate: true });
+                          setSelectedFileName("");
+                        }}
+                        className="absolute -top-2 -right-2 rounded-full bg-white p-1 shadow-md"
+                        aria-label="Remove image"
+                      >
+                        <X className="h-4 w-4 text-red-500" />
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="flex h-24 w-36 items-center justify-center rounded-lg border border-dashed border-gray-300 text-xs text-gray-500">
+                      {selectedFileName || "Preview"}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
