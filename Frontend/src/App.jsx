@@ -15,6 +15,7 @@ import UserProfile from './pages/UserProfile'
 import EditProfile from './pages/EditProfile'
 import Login  from './pages/auth/Login';
 import Register  from './pages/auth/Signup';
+import Authlayouts from './layouts/Authlayouts';
 import NotFound from './pages/NotFound'
 import ProtectedRoute from './routes/ProtectedRoute'
 import PublicRoute from './routes/PublicRoute'
@@ -52,8 +53,10 @@ function App() {
 
           {/* Auth Routes */}
           <Route element={<PublicRoute />}>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            <Route element={<Authlayouts />}>
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+            </Route>
           </Route>
 
           {/* 404 Not Found */}
