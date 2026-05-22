@@ -21,7 +21,6 @@ RUN composer install --no-dev --prefer-dist --no-interaction --optimize-autoload
 RUN touch database/database.sqlite
 
 RUN php artisan config:clear
-RUN php artisan cache:clear
 RUN php artisan migrate --force
 
 EXPOSE 10000
