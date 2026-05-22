@@ -4,17 +4,27 @@ RUN apt-get update && apt-get install -y \
     git \
     unzip \
     curl \
+    sqlite3 \
+    libsqlite3-dev \
     libpq-dev \
-    && docker-php-ext-install pdo_pgsql \
+    && docker-php-ext-install pdo pdo_sqlite pdo_pgsql \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 
-COPY . .
+COPY composer.json composer.lock ./
 
 RUN composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+
+COPY . .
+
+RUN touch database/database.sqlite
+
+RUN php artisan config:clear
+RUN php artisan cache:clear
+RUN php artisan migrate --force
 
 EXPOSE 10000
 
