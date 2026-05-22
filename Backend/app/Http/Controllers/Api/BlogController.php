@@ -6,13 +6,21 @@ use App\Http\Controllers\Controller;
 use App\Models\Blog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 class BlogController extends Controller
 {
     public function index()
     {
-        $blogs = Blog::with('user.profile')->latest()->get();
+        $blogs = Cache::remember('blogs:list', 30, function () {
+            return Blog::with(['user' => function ($q) {
+                $q->select('id', 'name');
+                $q->with(['profile' => function ($q2) {
+                    $q2->select('id', 'user_id', 'profile_pic');
+                }]);
+            }])->latest()->get(['id', 'user_id', 'title', 'category', 'slug', 'image', 'created_at']);
+        });
 
         return response()->json([
             'blogs' => $blogs
@@ -29,13 +37,38 @@ class BlogController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('blogs', 'public');
+            $disk = env('CLOUDINARY_API_KEY') && env('CLOUDINARY_CLOUD_NAME') ? 'cloudinary' : 'public';
+
+            if ($disk === 'cloudinary') {
+                try {
+                    $result = Storage::disk('cloudinary')->putFile('blogs', $request->file('image'));
+
+                    // Adapter may return a string path or an array with urls. Handle both.
+                    if (is_string($result)) {
+                        $data['image'] = Storage::disk('cloudinary')->url($result);
+                    } elseif (is_array($result)) {
+                        // common Cloudinary SDK keys
+                        $data['image'] = $result['secure_url'] ?? $result['url'] ?? (string) ($result['public_id'] ?? '');
+                    } else {
+                        // Fallback: attempt to cast to string or use local storage
+                        $data['image'] = (string) $result ?: $request->file('image')->store('blogs', 'public');
+                    }
+                } catch (\Throwable $e) {
+                    // If Cloudinary fails, fallback to local storage to avoid blocking the request
+                    $data['image'] = $request->file('image')->store('blogs', 'public');
+                }
+            } else {
+                $data['image'] = $request->file('image')->store('blogs', 'public');
+            }
         }
 
         $data['user_id'] = $request->user()?->id;
         $data['slug'] = Str::slug($data['title']) . '-' . time();
 
         $blog = Blog::create($data);
+
+        // Invalidate blogs list cache
+        Cache::forget('blogs:list');
 
         $blog->load('user.profile');
 
@@ -85,16 +118,37 @@ class BlogController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            if ($blog->image && Storage::disk('public')->exists($blog->image)) {
-                Storage::disk('public')->delete($blog->image);
-            }
+            $disk = env('CLOUDINARY_API_KEY') && env('CLOUDINARY_CLOUD_NAME') ? 'cloudinary' : 'public';
 
-            $data['image'] = $request->file('image')->store('blogs', 'public');
+            if ($disk === 'cloudinary') {
+                try {
+                    $result = Storage::disk('cloudinary')->putFile('blogs', $request->file('image'));
+
+                    if (is_string($result)) {
+                        $data['image'] = Storage::disk('cloudinary')->url($result);
+                    } elseif (is_array($result)) {
+                        $data['image'] = $result['secure_url'] ?? $result['url'] ?? (string) ($result['public_id'] ?? '');
+                    } else {
+                        $data['image'] = (string) $result ?: $request->file('image')->store('blogs', 'public');
+                    }
+                } catch (\Throwable $e) {
+                    $data['image'] = $request->file('image')->store('blogs', 'public');
+                }
+            } else {
+                if ($blog->image && Storage::disk('public')->exists($blog->image)) {
+                    Storage::disk('public')->delete($blog->image);
+                }
+
+                $data['image'] = $request->file('image')->store('blogs', 'public');
+            }
         }
 
         $data['slug'] = Str::slug($data['title']) . '-' . time();
 
         $blog->update($data);
+
+        // Invalidate blogs list cache
+        Cache::forget('blogs:list');
 
         return response()->json([
             'message' => 'Blog updated successfully',
@@ -110,11 +164,15 @@ class BlogController extends Controller
             })
             ->firstOrFail();
 
+        // Delete local image only if stored on public disk. Cloudinary images are left (optional cleanup).
         if ($blog->image && Storage::disk('public')->exists($blog->image)) {
             Storage::disk('public')->delete($blog->image);
         }
 
         $blog->delete();
+
+        // Invalidate blogs list cache
+        Cache::forget('blogs:list');
 
         return response()->json([
             'message' => 'Blog deleted successfully'
