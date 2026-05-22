@@ -13,12 +13,12 @@ Route::get('/user', function (Request $request) {
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/signup', [AuthController::class, 'signup']);
-Route::post('/logout', [AuthController::class, 'logout']);
 
 Route::get('/blogs', [BlogController::class, 'index']);
 Route::get('/blogs/{blog}', [BlogController::class, 'show']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/my-blogs', [BlogController::class, 'myBlogs']);
     Route::post('/blogs', [BlogController::class, 'store']);
     Route::put('/blogs/{blog}', [BlogController::class, 'update']);

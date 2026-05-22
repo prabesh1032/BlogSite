@@ -18,7 +18,7 @@ COPY . .
 
 RUN composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
 
-RUN touch database/database.sqlite
+RUN mkdir -p database && touch database/database.sqlite
 
 RUN php artisan config:clear
 RUN php artisan migrate --force
