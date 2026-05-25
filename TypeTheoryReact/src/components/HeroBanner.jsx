@@ -5,7 +5,7 @@ export default function HeroBanner({
   title = "My Blog",
 }) {
   return (
-    <section className="relative border-b border-gray-200">
+    <section className="full-bleed relative border-b border-gray-200">
       <div className="relative w-full h-64 md:h-72 overflow-hidden">
 
         {/* Banner Image */}

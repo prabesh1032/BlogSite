@@ -8,8 +8,8 @@ export default function UserProfile() {
   const navigate = useNavigate();
   const { user } = useStateContext();
 
-  const profileImage = user?.profile_picture || defaultAvatar;
-  const userName = user?.name ;
+const profileImage = user?.profile?.profile_pic || defaultAvatar;  
+const userName = user?.name ;
   const userEmail = user?.email ;
   const userPhone = user?.phone || "Not provided";
   const userBio = user?.bio || "No bio added yet";

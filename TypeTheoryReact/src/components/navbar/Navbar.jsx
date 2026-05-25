@@ -10,6 +10,7 @@ import AuthService from "../../services/authService";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
   const [scrolled, setScrolled] = useState(false);
   const navigate = useNavigate();
   const { token, user, setUser, setToken } = useStateContext();
@@ -42,6 +43,16 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const handleSearchSubmit = (event) => {
+    event.preventDefault();
+    const term = searchValue.trim();
+    if (!term) return;
+    navigate(`/search?q=${encodeURIComponent(term)}`);
+    if (menuOpen) {
+      setMenuOpen(false);
+    }
+  };
+
   return (
     <nav className={`w-full px-4 sm:px-6 lg:px-8 py-1 sm:py-2 transition-all duration-300 sticky top-0 z-50 ${
       scrolled 
@@ -69,12 +80,22 @@ export default function Navbar() {
           {/* Right Side Actions */}
           <div className="flex items-center gap-4 sm:gap-5">
             {/* Search Button */}
-            <button className="group flex items-center gap-2 px-4 py-2.5 rounded-full bg-gray-50 hover:bg-gray-100 transition-all duration-300">
-              <span className="hidden sm:inline text-base font-medium text-gray-600 group-hover:text-gray-900">
-                Search
-              </span>
-              <FaSearch className="text-gray-500 group-hover:text-gray-900 transition-colors w-4 h-4" />
-            </button>
+            <form
+              onSubmit={handleSearchSubmit}
+              className="hidden sm:flex items-center gap-2 rounded-full bg-gray-50 px-4 py-2.5 transition-all duration-300 hover:bg-gray-100"
+            >
+              <input
+                type="text"
+                value={searchValue}
+                onChange={(event) => setSearchValue(event.target.value)}
+                placeholder="Search"
+                className="w-32 sm:w-40 md:w-44 bg-transparent text-sm font-medium text-gray-700 placeholder:text-gray-400 outline-none"
+                aria-label="Search blogs"
+              />
+              <button type="submit" className="text-gray-500 transition-colors group-hover:text-gray-900">
+                <FaSearch className="w-4 h-4" />
+              </button>
+            </form>
 
             {token ? (
               <div className="relative hidden md:block group">
@@ -84,7 +105,7 @@ export default function Navbar() {
                   aria-label="Open profile menu"
                 >
                   <img
-                    src={user?.profile_picture || avatar}
+                    src={user?.profile?.profile_pic || avatar}
                     alt={user?.name || "User avatar"}
                     className="h-full w-full object-cover"
                   />
@@ -139,7 +160,23 @@ export default function Navbar() {
             menuOpen ? "max-h-96 opacity-100 mt-4" : "max-h-0 opacity-0"
           }`}
         >
-          <div className="border-t border-gray-100 pt-4 pb-2">
+          <div className="border-t border-gray-100 pt-4 pb-2 space-y-4">
+            <form
+              onSubmit={handleSearchSubmit}
+              className="flex items-center gap-2 rounded-full bg-gray-50 px-4 py-2.5 transition-all duration-300 hover:bg-gray-100"
+            >
+              <input
+                type="text"
+                value={searchValue}
+                onChange={(event) => setSearchValue(event.target.value)}
+                placeholder="Search blogs"
+                className="w-full bg-transparent text-sm font-medium text-gray-700 placeholder:text-gray-400 outline-none"
+                aria-label="Search blogs"
+              />
+              <button type="submit" className="text-gray-500">
+                <FaSearch className="w-4 h-4" />
+              </button>
+            </form>
             <Navlinks isMobile onNavigate={() => setMenuOpen(false)} />
           </div>
         </div>

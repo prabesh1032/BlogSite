@@ -154,20 +154,22 @@ export default function Home() {
             {/* Blog Cards Section */}
             <section
                 id="latest-articles"
-                className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-8 bg-linear-to-b from-gray-50 to-white"
+                className="py-12 sm:py-16 md:py-20 px-4 sm:px-6 lg:px-8 "
             >
                 <div className="max-w-7xl mx-auto">
                     {/* Section Header */}
                     <div className="text-center mb-10 sm:mb-12 md:mb-16">
-                        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 sm:mb-4 bg-linear-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-                            {selectedCategory ? `${selectedCategory[0].toUpperCase()}${selectedCategory.slice(1).toLowerCase()} Articles` : "Latest Articles"}
-                        </h2>
-                        <div className="w-20 h-1 bg-black mx-auto rounded-full"></div>
-                        <p className="text-gray-600 mt-4 max-w-2xl mx-auto text-sm sm:text-base">
-                            {selectedCategory
-                                ? `Showing posts in the ${selectedCategory} category`
-                                : "Discover insights, tutorials, and stories from our community"}
-                        </p>
+                        <div className="space-y-1">
+                            <span className="text-xs font-semibold tracking-[0.2em] text-sky-600 uppercase">
+                                {selectedCategory ? "Browsing" : "Latest"}
+                            </span>
+                            <h3
+                                className="text-3xl font-semibold text-gray-900"
+                                style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}
+                            >
+                                {selectedCategory ? `${selectedCategory[0].toUpperCase()}${selectedCategory.slice(1).toLowerCase()} Articles` : "Recent Posts From Our Community"}
+                            </h3>
+                        </div>
                     </div>
 
                     {/* Error Message */}

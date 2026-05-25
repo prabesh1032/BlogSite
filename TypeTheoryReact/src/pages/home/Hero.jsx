@@ -26,18 +26,19 @@ const Hero = ({ oldestBlogs = [] }) => {
 
         {/* Left — Content */}
         <div>
-          {/* Label */}
-          <div className="flex items-center gap-2 mb-4">
-            <span className="w-6 h-px bg-amber-700 block" />
-            <span className="text-[11px] font-medium tracking-[0.18em] uppercase text-amber-700">
+          {/* Label + Title */}
+          <div className="space-y-3 mb-4">
+            <span className="inline-block text-xs font-semibold tracking-[0.2em] text-sky-600 uppercase">
               Featured Story
             </span>
+            <h1
+              className="text-4xl font-semibold leading-tight text-gray-900"
+              style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}
+            >
+              What Your Music Preference Says About You and Your Personality
+            </h1>
+            <div className="w-12 h-0.5 bg-sky-500 rounded-full" />
           </div>
-
-          {/* Title */}
-          <h1 className="font-serif text-4xl font-bold leading-tight text-gray-900 mb-4">
-            What Your Music Preference Says About You and Your Personality
-          </h1>
 
           {/* Excerpt */}
           <p className="text-sm text-gray-500 leading-relaxed mb-6">
@@ -78,11 +79,11 @@ const Hero = ({ oldestBlogs = [] }) => {
                 to={`/blog/${post.slug || post.id}`}
                 className="flex items-center gap-4 py-3.5 border-b border-[#d9d3c9] cursor-pointer group"
               >
-                <span className="font-serif text-2xl font-bold text-[#d9d3c9] leading-none min-w-7">
+                <span className="font-serif text-2xl font-bold text-black leading-none min-w-7">
                   {post.num}
                 </span>
                 <div>
-                  <p className="text-[10px] font-medium tracking-[0.14em] uppercase text-amber-700 mb-1">
+                  <p className="text-[10px] font-medium tracking-[0.14em] uppercase text-sky-700 mb-1">
                     {post.category}
                   </p>
                   <p className="text-sm font-medium text-gray-900 leading-snug group-hover:underline">

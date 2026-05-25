@@ -74,19 +74,36 @@ export default function MyContain() {
   const canLoadMore = visibleCount < blogs.length;
 
   return (
-    <section className="bg-gray-50 min-h-screen">
+    <section className=" min-h-screen">
       <HeroBanner title="My Articles" />
 
       <div className="max-w-7xl mx-auto px-4 py-12">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-end gap-4 mb-10">
-          <button
-            type="button"
-            onClick={() => navigate("/mycontains/createblog")}
-            className="inline-flex items-center justify-center rounded-full bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-md hover:bg-indigo-700 transition cursor-pointer"
-          >
-            + Create Blog
-          </button>
-        </div>
+       <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between mb-12">
+  
+  {/* Left Content */}
+  <div className="space-y-1">
+    <span className="text-xs font-semibold tracking-[0.2em] text-sky-600 uppercase">
+      Your Library
+    </span>
+    <h3
+      className="text-3xl font-semibold text-gray-900"
+      style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}
+    >
+      Personal Writing Collection
+    </h3>
+  </div>
+
+  {/* Create Button */}
+  <button
+    type="button"
+    onClick={() => navigate("/mycontains/createblog")}
+    className="inline-flex items-center justify-center gap-2 rounded-full bg-indigo-600 px-6 py-3 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:bg-indigo-700 hover:scale-105 active:scale-95 cursor-pointer"
+  >
+    <span className="text-lg leading-none">+</span>
+    Create Blog
+  </button>
+
+</div>
 
         {error && (
           <div className="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">

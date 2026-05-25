@@ -11,9 +11,11 @@ import { Camera, X } from "lucide-react";
 export default function EditProfile() {
   const navigate = useNavigate();
   const { user, setUser } = useStateContext();
-  const [preview, setPreview] = useState(user?.profile_picture || defaultAvatar);
   const [serverError, setServerError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [preview, setPreview] = useState(
+  user?.profile?.profile_pic || defaultAvatar
+);
 
   const {
     register,

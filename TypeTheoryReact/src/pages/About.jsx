@@ -2,11 +2,13 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import HeroBanner from "../components/HeroBanner"
 import { Eye, Target, Trophy, Linkedin, Github, Facebook, PenLine, Zap, Image, Bookmark } from 'lucide-react'
+import prabeshAvatar from '../assets/useravatar/prabesh.jpg'
+import introImage from '../assets/blogimg.jpg'
 
 const founder = {
   name: 'Prabesh Acharya',
   role: 'Founder & Developer',
-  image: '/teams/prabesh.jpg',
+  image: prabeshAvatar,
   bio: `Hi — I'm Prabesh. I build developer tools and write about code, design and product thinking. This project started as a learning playground and became a small space for creators to publish thoughtful technical writing.`,
   socials: {
     facebook: 'https://facebook.com/prabesh1032',
@@ -81,7 +83,7 @@ export default function About() {
             <div className="absolute -inset-3 rounded-2xl bg-gradient-to-br from-sky-50 to-slate-100" />
             <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden shadow-md">
               <img
-                src="/banner/about-hero.jpg"
+                src={introImage}
                 alt="About TypeTheory"
                 className="w-full h-full object-cover"
                 onError={(e) => { e.target.src = 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&h=800&fit=crop' }}
@@ -188,9 +190,9 @@ export default function About() {
 
         {/* CTA */}
         <section className="relative overflow-hidden rounded-3xl bg-gray-950 px-10 py-16 text-center space-y-6">
-          <div className="absolute inset-0 opacity-10"
+          <div className="absolute inset-0 opacity-10 pointer-events-none" aria-hidden="true"
             style={{ backgroundImage: 'radial-gradient(circle at 30% 50%, #38bdf8 0%, transparent 60%), radial-gradient(circle at 75% 30%, #6366f1 0%, transparent 55%)' }} />
-          <div className="relative space-y-3">
+          <div className="relative z-10 space-y-3">
             <h3
               className="text-3xl md:text-4xl font-semibold text-white"
               style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}
@@ -201,8 +203,8 @@ export default function About() {
               Join TypeTheory and share your ideas with a community that values clarity and craft.
             </p>
           </div>
-          <Link to="/mycontains/createblog">
-            <button className="inline-flex items-center gap-2 px-7 py-3 bg-white text-gray-950 rounded-full text-sm font-semibold hover:bg-sky-50 transition-colors duration-200 shadow-sm">
+          <Link to="/mycontains/createblog" className="relative z-10 inline-flex cursor-pointer">
+            <button type="button" className="inline-flex items-center gap-2 px-7 py-3 bg-white text-gray-950 rounded-full text-sm font-semibold hover:bg-sky-50 transition-colors duration-200 shadow-sm cursor-pointer">
               <PenLine className="w-4 h-4" />
               Start Writing
             </button>

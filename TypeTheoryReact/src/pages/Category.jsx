@@ -142,14 +142,19 @@ export default function Category() {
   };
 
   return (
-    <section className="bg-gray-50 min-h-screen">
+    <section className=" min-h-screen">
       <HeroBanner title={`${pageTitle} Blogs`} />
 
       <div className="max-w-7xl mx-auto px-4 py-12">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-10">
-          <div>
-            <p className="text-sm uppercase tracking-[0.25em] text-gray-500">Browsing</p>
-            <h2 className="text-2xl font-semibold text-gray-900">{pageTitle}</h2>
+          <div className="space-y-1">
+            <span className="text-xs font-semibold tracking-[0.2em] text-sky-600 uppercase">Browsing</span>
+            <h3
+              className="text-3xl font-semibold text-gray-900"
+              style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}
+            >
+              {pageTitle}
+            </h3>
           </div>
           <button
             type="button"

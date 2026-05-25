@@ -6,6 +6,7 @@ import About from './pages/About'
 import Contact from './pages/Contact'
 import Category from './pages/Category'
 import ViewBlog from './pages/ViewBlog'
+import Search from './pages/Search'
 import MyContain from './pages/MyContain'
 import LikedBlogs from './pages/LikedBlogs'
 import BookmarkedBlogs from './pages/BookmarkedBlogs'
@@ -34,6 +35,7 @@ function App() {
             <Route index element={<Home />} />
             <Route path="about" element={<About />} />
             <Route path="contact" element={<Contact />} />
+            <Route path="search" element={<Search />} />
             <Route path="category" element={<Category />} />
             <Route path="category/:slug" element={<Category />} />
             <Route path="blog/:slug" element={<ViewBlog />} />

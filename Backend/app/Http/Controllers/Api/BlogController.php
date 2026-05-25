@@ -27,6 +27,40 @@ class BlogController extends Controller
         ]);
     }
 
+    public function search(Request $request)
+    {
+        $query = trim((string) $request->query('q', ''));
+
+        if ($query === '') {
+            return response()->json([
+                'blogs' => []
+            ]);
+        }
+
+        $cacheKey = 'blogs:search:' . md5(Str::lower($query));
+
+        $blogs = Cache::remember($cacheKey, 30, function () use ($query) {
+            return Blog::with(['user' => function ($q) {
+                $q->select('id', 'name');
+                $q->with(['profile' => function ($q2) {
+                    $q2->select('id', 'user_id', 'profile_pic');
+                }]);
+            }])
+                ->where(function ($q) use ($query) {
+                    $q->where('title', 'like', "%{$query}%")
+                        ->orWhere('category', 'like', "%{$query}%")
+                        ->orWhere('description', 'like', "%{$query}%");
+                })
+                ->latest()
+                ->limit(60)
+                ->get(['id', 'user_id', 'title', 'category', 'slug', 'image', 'created_at']);
+        });
+
+        return response()->json([
+            'blogs' => $blogs
+        ]);
+    }
+
     public function store(Request $request)
     {
         $data = $request->validate([

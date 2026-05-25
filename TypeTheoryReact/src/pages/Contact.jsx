@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import HeroBanner from "../components/HeroBanner";
-import { MapPin, Mail as MailIcon, Phone } from 'lucide-react'
+import { MapPin, Mail as MailIcon, CheckCircle, MessageCircle, PhoneCall, Instagram, Facebook, Twitter } from 'lucide-react'
 
 export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' })
@@ -28,7 +28,6 @@ export default function Contact() {
 
     setStatus('loading')
     try {
-      // Posts to backend contact endpoint. Adjust URL if your API differs.
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -45,16 +44,54 @@ export default function Contact() {
   }
 
   return (
-    <>
+    <div className="min-h-screen bg-white text-gray-900" style={{ fontFamily: "'DM Sans', 'Helvetica Neue', sans-serif" }}>
+      <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet" />
+
       <HeroBanner title="Contact" />
 
-      <main className="max-w-6xl mx-auto px-6 py-20">
+      <main className="max-w-6xl mx-auto px-6 py-16">
+        {/* Top contact cards */}
+        <section className="mb-12 space-y-6">
+          <div className="space-y-3">
+            <p className="text-gray-500 text-sm text-center">Have a question, suggestion, or just want to say hello? We'd love to hear from you! Fill out the form below or reach out through any of our contact channels.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="bg-white shadow rounded p-6 flex flex-col items-start gap-3">
+              <div className="p-3 rounded bg-sky-50 text-sky-600"><MailIcon className="w-6 h-6" /></div>
+              <h4 className="font-semibold text-lg">Email Us</h4>
+              <p className="text-sm text-gray-500">noreply.typetheory@gmail.com</p>
+            </div>
+
+            <div className="bg-white shadow rounded p-6 flex flex-col items-start gap-3">
+              <div className="p-3 rounded bg-sky-50 text-sky-600"><PhoneCall className="w-6 h-6" /></div>
+              <h4 className="font-semibold text-lg">Call Us</h4>
+              <p className="text-sm text-gray-500">+977 9812345110</p>
+            </div>
+
+            <div className="bg-white shadow rounded p-6 flex flex-col items-start gap-3">
+              <div className="p-3 rounded bg-sky-50 text-sky-600"><MapPin className="w-6 h-6" /></div>
+              <h4 className="font-semibold text-lg">Visit Us</h4>
+              <p className="text-sm text-gray-500">Kathmandu, Nepal</p>
+            </div>
+          </div>
+        </section>
+
         <div className="grid gap-8 grid-cols-1 lg:grid-cols-3">
 
           {/* Contact Form */}
-          <div className="lg:col-span-2 bg-white shadow rounded p-6">
-            <h2 className="text-3xl font-bold mb-2 text-gray-800">Send us a message</h2>
-            <p className="text-sm text-gray-400 mb-6">We typically reply within 24–48 hours.</p>
+          <div className="lg:col-span-2 bg-white shadow rounded p-8">
+            <div className="space-y-3 mb-6">
+              <span className="inline-block text-xs font-semibold tracking-[0.2em] text-sky-600 uppercase">Send a message</span>
+              <h2
+                className="text-3xl md:text-4xl font-semibold leading-tight text-gray-900"
+                style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}
+              >
+                We'd love to hear from you
+              </h2>
+              <div className="w-12 h-0.5 bg-sky-500 rounded-full" />
+              <p className="text-sm text-gray-500">Have a question, suggestion, or just want to say hello? We'll respond within 24 hours.</p>
+            </div>
 
             {status === 'success' && (
               <div className="mb-4 p-3 rounded bg-green-50 text-green-800 border border-green-100">Thanks — your message was sent.</div>
@@ -68,14 +105,14 @@ export default function Contact() {
                 <div>
                   <label className="block text-sm font-medium text-gray-600 mb-1.5">Name</label>
                   <input name="name" value={form.name} onChange={handleChange}
-                    className={`w-full border-b ${errors.name ? 'border-red-400' : 'border-gray-200'} py-2.5 text-gray-800 text-sm placeholder-gray-300 outline-none transition focus:border-indigo-400 bg-transparent`} />
+                    className={`w-full border rounded px-3 py-2 text-gray-800 text-sm placeholder-gray-400 outline-none transition ${errors.name ? 'border-red-400' : 'border-gray-200'}`} />
                   {errors.name && <p className="text-xs text-red-400 mt-1">{errors.name}</p>}
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-600 mb-1.5">Email</label>
                   <input name="email" value={form.email} onChange={handleChange} type="email"
-                    className={`w-full border-b ${errors.email ? 'border-red-400' : 'border-gray-200'} py-2.5 text-gray-800 text-sm placeholder-gray-300 outline-none transition focus:border-indigo-400 bg-transparent`} />
+                    className={`w-full border rounded px-3 py-2 text-gray-800 text-sm placeholder-gray-400 outline-none transition ${errors.email ? 'border-red-400' : 'border-gray-200'}`} />
                   {errors.email && <p className="text-xs text-red-400 mt-1">{errors.email}</p>}
                 </div>
               </div>
@@ -83,65 +120,144 @@ export default function Contact() {
               <div>
                 <label className="block text-sm font-medium text-gray-600 mb-1.5">Subject</label>
                 <input name="subject" value={form.subject} onChange={handleChange}
-                  className="w-full border-b border-gray-200 py-2.5 text-gray-800 text-sm placeholder-gray-300 outline-none transition focus:border-indigo-400 bg-transparent" />
+                  className="w-full border rounded px-3 py-2 text-gray-800 text-sm placeholder-gray-400 outline-none transition border-gray-200" />
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-600 mb-1.5">Message</label>
                 <textarea name="message" value={form.message} onChange={handleChange} rows={6}
-                  className={`w-full border-b ${errors.message ? 'border-red-400' : 'border-gray-200'} py-2.5 text-gray-800 text-sm placeholder-gray-300 outline-none transition focus:border-indigo-400 bg-transparent resize-none`} />
+                  className={`w-full border rounded px-3 py-2 text-gray-800 text-sm placeholder-gray-400 outline-none transition ${errors.message ? 'border-red-400' : 'border-gray-200'} resize-none`} />
                 {errors.message && <p className="text-xs text-red-400 mt-1">{errors.message}</p>}
               </div>
 
               <div className="mt-2">
                 <button type="submit" disabled={status === 'loading'}
-                  className="w-full bg-indigo-500 hover:bg-indigo-600 text-white font-semibold py-3 rounded-lg text-sm transition disabled:opacity-60">
-                  {status === 'loading' ? 'Sending...' : 'Send message'}
+                  className="w-full bg-gradient-to-r from-sky-500 to-sky-600 hover:from-sky-600 hover:to-sky-700 text-white font-semibold py-3 rounded-lg text-sm transition disabled:opacity-60">
+                  {status === 'loading' ? 'Sending...' : 'Send Message'}
                 </button>
               </div>
             </form>
           </div>
 
-          {/* Contact Info + Map */}
+          {/* Right column: Why Contact, Connect */}
           <aside className="space-y-6">
-            <div className="bg-[#141a57] text-white shadow rounded p-4">
-              <h3 className="font-semibold text-white">Contact Info</h3>
-              <ul className="mt-3 space-y-3 text-sm text-gray-200">
+            <div className="bg-white shadow rounded p-6">
+              <div className="space-y-2 mb-4">
+                <span className="inline-block text-xs font-semibold tracking-[0.2em] text-sky-600 uppercase">Why reach out</span>
+                <h3
+                  className="text-2xl font-semibold text-gray-900"
+                  style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}
+                >
+                  Why Contact Us?
+                </h3>
+                <div className="w-10 h-0.5 bg-sky-500 rounded-full" />
+              </div>
+              <ul className="space-y-3 text-sm text-gray-600">
                 <li className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-indigo-300 mt-1" />
+                  <CheckCircle className="w-5 h-5 text-sky-600 mt-1" />
                   <div>
-                    <div className="font-medium">Our Office</div>
-                    <div className="text-indigo-200">123 TypeTheory Ave, City, Country</div>
+                    <div className="font-medium">Quick Response</div>
+                    <div className="text-gray-500">We typically respond within 24 hours.</div>
                   </div>
                 </li>
 
                 <li className="flex items-start gap-3">
-                  <MailIcon className="w-5 h-5 text-indigo-300 mt-1" />
+                  <MessageCircle className="w-5 h-5 text-sky-600 mt-1" />
                   <div>
-                    <div className="font-medium">Email</div>
-                    <div className="text-indigo-200">hello@typetheory.app</div>
+                    <div className="font-medium">Expert Support</div>
+                    <div className="text-gray-500">Our team is here to help with any questions.</div>
                   </div>
                 </li>
 
                 <li className="flex items-start gap-3">
-                  <Phone className="w-5 h-5 text-indigo-300 mt-1" />
+                  <CheckCircle className="w-5 h-5 text-sky-400 mt-1" />
                   <div>
-                    <div className="font-medium">Phone</div>
-                    <div className="text-indigo-200">+1 (555) 123-4567</div>
+                    <div className="font-medium">Community Focused</div>
+                    <div className="text-gray-500">We value your feedback and suggestions.</div>
+                  </div>
+                </li>
+
+                <li className="flex items-start gap-3">
+                  <CheckCircle className="w-5 h-5 text-sky-300 mt-1" />
+                  <div>
+                    <div className="font-medium">Privacy Protected</div>
+                    <div className="text-gray-500">Your information is safe and secure with us.</div>
                   </div>
                 </li>
               </ul>
             </div>
 
-            <div className="bg-white shadow rounded overflow-hidden">
-              <div className="w-full h-48 md:h-64">
-                <iframe title="map" src="https://www.google.com/maps?q=New+York+City&output=embed" className="w-full h-full border-0"></iframe>
+            <div className="bg-white shadow rounded p-4">
+              <div className="space-y-2 mb-3">
+                <span className="inline-block text-xs font-semibold tracking-[0.2em] text-sky-600 uppercase">Connect</span>
+                <h4
+                  className="text-xl font-semibold text-gray-900"
+                  style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}
+                >
+                  Connect With Us
+                </h4>
+                <div className="w-10 h-0.5 bg-sky-500 rounded-full" />
+              </div>
+              <div className="flex items-center gap-3">
+                <a aria-label="facebook" className="p-2 rounded bg-gray-100 hover:bg-gray-200"><Facebook className="w-5 h-5 text-gray-700" /></a>
+                <a aria-label="twitter" className="p-2 rounded bg-gray-100 hover:bg-gray-200"><Twitter className="w-5 h-5 text-gray-700" /></a>
+                <a aria-label="instagram" className="p-2 rounded bg-gray-100 hover:bg-gray-200"><Instagram className="w-5 h-5 text-gray-700" /></a>
+                <a aria-label="github" className="p-2 rounded bg-gray-100 hover:bg-gray-200"><MailIcon className="w-5 h-5 text-gray-700" /></a>
               </div>
             </div>
           </aside>
         </div>
+
+        {/* FAQ Section */}
+        <section className="mt-16">
+          <div className="text-center space-y-3 mb-8">
+            <span className="inline-block text-xs font-semibold tracking-[0.2em] text-sky-600 uppercase">FAQs</span>
+            <h3
+              className="text-2xl md:text-3xl font-semibold text-gray-900"
+              style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}
+            >
+              Frequently Asked Questions
+            </h3>
+            <div className="w-12 h-0.5 bg-sky-500 rounded-full mx-auto" />
+            <p className="text-center text-sm text-gray-500">Quick answers to common questions</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="p-8 bg-white border border-gray-100 rounded-2xl hover:border-sky-200 hover:shadow-sm transition-all duration-300 space-y-4">
+              <div className="w-11 h-11 flex items-center justify-center bg-sky-50 rounded-lg">
+                <CheckCircle className="w-5 h-5 text-sky-600" />
+              </div>
+              <p className="font-semibold text-base text-gray-900">How do I create an account?</p>
+              <p className="text-sm text-gray-500 leading-relaxed">Click the "Sign up" button in the navigation bar and fill in your details. You'll receive a verification email to activate your account.</p>
+            </div>
+
+            <div className="p-8 bg-white border border-gray-100 rounded-2xl hover:border-sky-200 hover:shadow-sm transition-all duration-300 space-y-4">
+              <div className="w-11 h-11 flex items-center justify-center bg-sky-50 rounded-lg">
+                <CheckCircle className="w-5 h-5 text-sky-600" />
+              </div>
+              <p className="font-semibold text-base text-gray-900">Can I publish my blog for free?</p>
+              <p className="text-sm text-gray-500 leading-relaxed">Yes! Our platform is completely free to use. Create and publish as many blogs as you want without any charges.</p>
+            </div>
+
+            <div className="p-8 bg-white border border-gray-100 rounded-2xl hover:border-sky-200 hover:shadow-sm transition-all duration-300 space-y-4">
+              <div className="w-11 h-11 flex items-center justify-center bg-sky-50 rounded-lg">
+                <CheckCircle className="w-5 h-5 text-sky-600" />
+              </div>
+              <p className="font-semibold text-base text-gray-900">How long does it take to get a response?</p>
+              <p className="text-sm text-gray-500 leading-relaxed">We aim to respond to all inquiries within 24 hours during business days. Urgent matters are prioritized.</p>
+            </div>
+
+            <div className="p-8 bg-white border border-gray-100 rounded-2xl hover:border-sky-200 hover:shadow-sm transition-all duration-300 space-y-4">
+              <div className="w-11 h-11 flex items-center justify-center bg-sky-50 rounded-lg">
+                <CheckCircle className="w-5 h-5 text-sky-600" />
+              </div>
+              <p className="font-semibold text-base text-gray-900">Do you offer technical support?</p>
+              <p className="text-sm text-gray-500 leading-relaxed">Yes! Our support team is available to help with any technical issues you may have about using the platform.</p>
+            </div>
+          </div>
+        </section>
       </main>
-    </>
+    </div>
   )
 }
 

@@ -15,6 +15,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::post('/signup', [AuthController::class, 'signup']);
 
 Route::get('/blogs', [BlogController::class, 'index']);
+Route::get('/blogs/search', [BlogController::class, 'search']);
 Route::get('/blogs/{blog}', [BlogController::class, 'show']);
 
 Route::middleware('auth:sanctum')->group(function () {

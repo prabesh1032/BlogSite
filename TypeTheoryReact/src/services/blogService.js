@@ -2,6 +2,7 @@ import {
   getBlogsAPI,
   getMyBlogsAPI,
   getBlogAPI,
+  searchBlogsAPI,
   createBlogAPI,
   updateBlogAPI,
   deleteBlogAPI,
@@ -23,6 +24,12 @@ const BlogService = {
   // Get single blog
   async getBlog(id) {
     const response = await getBlogAPI(id);
+    return response;
+  },
+
+  // Search blogs
+  async searchBlogs(query) {
+    const response = await searchBlogsAPI(query);
     return response;
   },
 

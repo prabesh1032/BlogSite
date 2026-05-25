@@ -18,6 +18,14 @@ export async function getBlogAPI(id) {
   return res.data;
 }
 
+// Search blogs by query
+export async function searchBlogsAPI(query) {
+  const res = await api.get("/blogs/search", {
+    params: { q: query },
+  });
+  return res.data;
+}
+
 // Create blog
 export async function createBlogAPI(payload) {
   const res = await api.post("/blogs", payload);
