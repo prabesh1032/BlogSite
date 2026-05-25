@@ -158,22 +158,18 @@ export default function Home() {
             >
                 <div className="max-w-7xl mx-auto">
                     {/* Section Header */}
-                    <div className="text-center mb-10 sm:mb-12 md:mb-16 space-y-3">
-                        <span className="inline-block text-xs font-semibold tracking-[0.2em] text-sky-600 uppercase">
-                            {selectedCategory ? `${selectedCategory} category` : "Latest Articles"}
-                        </span>
-                        <h2
-                            className="text-3xl sm:text-4xl md:text-5xl font-semibold text-gray-900"
-                            style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}
-                        >
-                            {selectedCategory ? `${selectedCategory[0].toUpperCase()}${selectedCategory.slice(1).toLowerCase()} Articles` : "Latest Articles"}
-                        </h2>
-                        <div className="w-12 h-0.5 bg-sky-500 mx-auto rounded-full" />
-                        <p className="text-gray-500 max-w-2xl mx-auto text-sm sm:text-base">
-                            {selectedCategory
-                                ? `Showing posts in the ${selectedCategory} category`
-                                : "Discover insights, tutorials, and stories from our community"}
-                        </p>
+                    <div className="text-center mb-10 sm:mb-12 md:mb-16">
+                        <div className="space-y-1">
+                            <span className="text-xs font-semibold tracking-[0.2em] text-sky-600 uppercase">
+                                {selectedCategory ? "Browsing" : "Latest"}
+                            </span>
+                            <h3
+                                className="text-3xl font-semibold text-gray-900"
+                                style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}
+                            >
+                                {selectedCategory ? `${selectedCategory[0].toUpperCase()}${selectedCategory.slice(1).toLowerCase()} Articles` : "Recent Posts From Our Community"}
+                            </h3>
+                        </div>
                     </div>
 
                     {/* Error Message */}

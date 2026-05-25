@@ -81,14 +81,16 @@ export default function MyContain() {
        <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between mb-12">
   
   {/* Left Content */}
-  <div>
-    <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
-      Your Articles
-    </h2>
-
-    <p className="mt-2 text-sm sm:text-base text-gray-600">
-      Manage, edit, and publish your written content.
-    </p>
+  <div className="space-y-1">
+    <span className="text-xs font-semibold tracking-[0.2em] text-sky-600 uppercase">
+      Your Library
+    </span>
+    <h3
+      className="text-3xl font-semibold text-gray-900"
+      style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}
+    >
+      Personal Writing Collection
+    </h3>
   </div>
 
   {/* Create Button */}
