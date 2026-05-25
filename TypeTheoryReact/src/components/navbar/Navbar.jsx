@@ -105,7 +105,7 @@ export default function Navbar() {
                   aria-label="Open profile menu"
                 >
                   <img
-                    src={user?.profile_picture || avatar}
+                    src={user?.profile?.profile_pic || avatar}
                     alt={user?.name || "User avatar"}
                     className="h-full w-full object-cover"
                   />
