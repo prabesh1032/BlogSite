@@ -124,6 +124,17 @@ export default function BookmarkedBlogs() {
       <HeroBanner title="Bookmarked Articles" />
 
       <div className="max-w-7xl mx-auto px-4 py-12">
+        <div className="mb-10">
+          <div className="space-y-1">
+            <span className="text-xs font-semibold tracking-[0.2em] text-sky-600 uppercase">Saved for later</span>
+            <h3
+              className="text-3xl font-semibold text-gray-900"
+              style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}
+            >
+              Saved for Later Reading List
+            </h3>
+          </div>
+        </div>
         {error && (
           <div className="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
             {error}
