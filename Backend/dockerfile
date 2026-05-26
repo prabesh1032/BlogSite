@@ -16,11 +16,6 @@ COPY . .
 
 RUN composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
 
-RUN php artisan storage:link
-RUN php artisan config:cache
-RUN php artisan route:cache
-RUN php artisan view:cache
-
 EXPOSE 10000
 
-CMD ["sh", "-c", "php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=${PORT:-10000}"]
+CMD ["sh", "-c", "php artisan config:clear && php artisan config:cache && php artisan route:cache && php artisan view:cache; php artisan storage:link --force || true; php artisan migrate --force; php artisan serve --host=0.0.0.0 --port=${PORT:-10000}"]
