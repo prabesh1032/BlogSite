@@ -183,10 +183,13 @@ export default function ViewBlog() {
     );
   }
 
-  const descriptionLines = String(blog.description || "")
-    .split(/\n+/)
-    .map((l) => l.trim())
-    .filter(Boolean);
+  const descriptionHtml = String(blog.description || "");
+  const descriptionText = descriptionHtml
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&nbsp;/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+  const hasDescription = descriptionText.length > 0;
 
   /* ── Author initials ── */
   const initials = (blog.user?.name || "A")
@@ -303,29 +306,20 @@ export default function ViewBlog() {
         )}
 
         {/* Hero image */}
-        <div className="mb-8 rounded-2xl overflow-hidden border border-gray-100 bg-white">
-          <img
-            src={imageUrl}
-            alt={blog.title}
-            className="w-full h-auto max-h-128 object-contain bg-gray-50"
-          />
+        <div className="mb-8 rounded-2xl overflow-hidden border border-gray-100 bg-gray-50">
+          <div className="w-full aspect-[16/9] sm:aspect-[2/1]">
+            <img
+              src={imageUrl}
+              alt={blog.title}
+              className="h-full w-full object-cover"
+            />
+          </div>
         </div>
 
         {/* Body */}
-        <div className="space-y-6">
-          {descriptionLines.length > 0 ? (
-            descriptionLines.map((line, i) => (
-              <p
-                key={i}
-                className={`leading-relaxed text-gray-600 font-light text-[1.05rem] ${
-                  i === 0
-                    ? "first-letter:text-5xl first-letter:font-serif first-letter:font-bold first-letter:float-left first-letter:leading-[0.85] first-letter:mr-2.5 first-letter:mt-1 first-letter:text-gray-900"
-                    : ""
-                }`}
-              >
-                {line}
-              </p>
-            ))
+        <div className="blog-content text-gray-600 text-[1.05rem] leading-relaxed">
+          {hasDescription ? (
+            <div dangerouslySetInnerHTML={{ __html: descriptionHtml }} />
           ) : (
             <p className="text-gray-400 italic">No description available.</p>
           )}

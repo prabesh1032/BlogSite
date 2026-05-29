@@ -24,6 +24,25 @@
   font-size: 1rem;
 }
 
+.blog-content p {
+  margin: 0 0 1.5rem;
+}
+
+.blog-content p:last-child {
+  margin-bottom: 0;
+}
+
+.blog-content p:first-child::first-letter {
+  float: left;
+  margin-right: 0.6rem;
+  margin-top: 0.25rem;
+  font-family: "DM Serif Display", serif;
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 0.85;
+  color: #111827;
+}
+
 /* Smooth scroll behavior */
 html {
   font-size: 80%;
