@@ -4,6 +4,7 @@ import { api } from "../api/axios";
 import BlogService from "../services/blogService";
 import useStateContext from "../context/useStateContext";
 import { showErrorToast, showSuccessToast } from "../components/ShowToast";
+import DeleteModal from "../components/DeleteModal";
 import { ArrowLeft, Bookmark, Clock, Edit3, Heart, Link, Trash2 } from "lucide-react";
 
 const fallbackImage =
@@ -43,6 +44,8 @@ export default function ViewBlog() {
       return {};
     }
   });
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const blogOwnerId = blog?.user?.id;
   const currentUserId = user?.id;
@@ -100,10 +103,10 @@ export default function ViewBlog() {
   };
 
   const handleDelete = async () => {
-    const confirmed = window.confirm("Are you sure you want to delete this blog?");
-    if (!confirmed || !blog?.id) return;
+    if (!blog?.id) return;
     try {
       setActionError("");
+      setIsDeleting(true);
       await BlogService.deleteBlog(blog.id);
       showSuccessToast("Blog deleted successfully");
       navigate("/mycontains");
@@ -112,6 +115,9 @@ export default function ViewBlog() {
         err?.response?.data?.message || err?.message || "Failed to delete blog";
       setActionError(message);
       showErrorToast(message);
+    } finally {
+      setIsDeleting(false);
+      setIsDeleteOpen(false);
     }
   };
 
@@ -227,7 +233,7 @@ export default function ViewBlog() {
 
       <button
         type="button"
-        onClick={handleDelete}
+        onClick={() => setIsDeleteOpen(true)}
         className="rounded-full bg-red-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:bg-red-700 hover:scale-105 cursor-pointer"
       >
         Delete Blog
@@ -325,6 +331,15 @@ export default function ViewBlog() {
           )}
         </div>
       </article>
+      <DeleteModal
+        isOpen={isDeleteOpen}
+        title="Delete this blog?"
+        description="This action cannot be undone."
+        confirmLabel="Delete"
+        onConfirm={handleDelete}
+        onCancel={() => setIsDeleteOpen(false)}
+        isLoading={isDeleting}
+      />
     </div>
   );
 }
