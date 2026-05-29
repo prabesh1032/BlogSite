@@ -6,21 +6,15 @@ use App\Http\Controllers\Controller;
 use App\Models\Blog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 class BlogController extends Controller
 {
     public function index()
     {
-        $blogs = Cache::remember('blogs:list', 30, function () {
-            return Blog::with(['user' => function ($q) {
-                $q->select('id', 'name');
-                $q->with(['profile' => function ($q2) {
-                    $q2->select('id', 'user_id', 'profile_pic');
-                }]);
-            }])->latest()->get(['id', 'user_id', 'title', 'category', 'slug', 'image', 'created_at']);
-        });
+        $blogs = Blog::with('user.profile')
+            ->latest()
+            ->get();
 
         return response()->json([
             'blogs' => $blogs
@@ -29,7 +23,7 @@ class BlogController extends Controller
 
     public function search(Request $request)
     {
-        $query = trim((string) $request->query('q', ''));
+        $query = trim($request->query('q', ''));
 
         if ($query === '') {
             return response()->json([
@@ -37,24 +31,14 @@ class BlogController extends Controller
             ]);
         }
 
-        $cacheKey = 'blogs:search:' . md5(Str::lower($query));
-
-        $blogs = Cache::remember($cacheKey, 30, function () use ($query) {
-            return Blog::with(['user' => function ($q) {
-                $q->select('id', 'name');
-                $q->with(['profile' => function ($q2) {
-                    $q2->select('id', 'user_id', 'profile_pic');
-                }]);
-            }])
-                ->where(function ($q) use ($query) {
-                    $q->where('title', 'like', "%{$query}%")
-                        ->orWhere('category', 'like', "%{$query}%")
-                        ->orWhere('description', 'like', "%{$query}%");
-                })
-                ->latest()
-                ->limit(60)
-                ->get(['id', 'user_id', 'title', 'category', 'slug', 'image', 'created_at']);
-        });
+        $blogs = Blog::with('user.profile')
+            ->where(function ($q) use ($query) {
+                $q->where('title', 'like', "%{$query}%")
+                    ->orWhere('category', 'like', "%{$query}%")
+                    ->orWhere('description', 'like', "%{$query}%");
+            })
+            ->latest()
+            ->get();
 
         return response()->json([
             'blogs' => $blogs
@@ -71,44 +55,18 @@ class BlogController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $disk = env('CLOUDINARY_API_KEY') && env('CLOUDINARY_CLOUD_NAME') ? 'cloudinary' : 'public';
-
-            if ($disk === 'cloudinary') {
-                try {
-                    $result = Storage::disk('cloudinary')->putFile('blogs', $request->file('image'));
-
-                    // Adapter may return a string path or an array with urls. Handle both.
-                    if (is_string($result)) {
-                        $data['image'] = Storage::disk('cloudinary')->url($result);
-                    } elseif (is_array($result)) {
-                        // common Cloudinary SDK keys
-                        $data['image'] = $result['secure_url'] ?? $result['url'] ?? (string) ($result['public_id'] ?? '');
-                    } else {
-                        // Fallback: attempt to cast to string or use local storage
-                        $data['image'] = (string) $result ?: $request->file('image')->store('blogs', 'public');
-                    }
-                } catch (\Throwable $e) {
-                    // If Cloudinary fails, fallback to local storage to avoid blocking the request
-                    $data['image'] = $request->file('image')->store('blogs', 'public');
-                }
-            } else {
-                $data['image'] = $request->file('image')->store('blogs', 'public');
-            }
+            $path = Storage::disk('cloudinary')->putFile('blogs', $request->file('image'));
+            $data['image'] = Storage::disk('cloudinary')->url($path);
         }
 
-        $data['user_id'] = $request->user()?->id;
+        $data['user_id'] = $request->user()->id;
         $data['slug'] = Str::slug($data['title']) . '-' . time();
 
         $blog = Blog::create($data);
 
-        // Invalidate blogs list cache
-        Cache::forget('blogs:list');
-
-        $blog->load('user.profile');
-
         return response()->json([
             'message' => 'Blog created successfully',
-            'blog' => $blog
+            'blog' => $blog->load('user.profile')
         ], 201);
     }
 
@@ -126,10 +84,15 @@ class BlogController extends Controller
 
     public function show($blog)
     {
-        $blog = Blog::with('user.profile')
-            ->where('slug', $blog)
-            ->orWhere('id', $blog)
-            ->firstOrFail();
+        $query = Blog::with('user.profile');
+
+        if (is_numeric($blog)) {
+            $query->where('id', $blog);
+        } else {
+            $query->where('slug', $blog);
+        }
+
+        $blog = $query->firstOrFail();
 
         return response()->json([
             'blog' => $blog
@@ -138,11 +101,15 @@ class BlogController extends Controller
 
     public function update(Request $request, $blog)
     {
-        $blog = Blog::where('user_id', $request->user()->id)
-            ->where(function ($query) use ($blog) {
-                $query->where('slug', $blog)->orWhere('id', $blog);
-            })
-            ->firstOrFail();
+        $query = Blog::where('user_id', $request->user()->id);
+
+        if (is_numeric($blog)) {
+            $query->where('id', $blog);
+        } else {
+            $query->where('slug', $blog);
+        }
+
+        $blog = $query->firstOrFail();
 
         $data = $request->validate([
             'title' => 'required|string|max:255',
@@ -152,37 +119,13 @@ class BlogController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $disk = env('CLOUDINARY_API_KEY') && env('CLOUDINARY_CLOUD_NAME') ? 'cloudinary' : 'public';
-
-            if ($disk === 'cloudinary') {
-                try {
-                    $result = Storage::disk('cloudinary')->putFile('blogs', $request->file('image'));
-
-                    if (is_string($result)) {
-                        $data['image'] = Storage::disk('cloudinary')->url($result);
-                    } elseif (is_array($result)) {
-                        $data['image'] = $result['secure_url'] ?? $result['url'] ?? (string) ($result['public_id'] ?? '');
-                    } else {
-                        $data['image'] = (string) $result ?: $request->file('image')->store('blogs', 'public');
-                    }
-                } catch (\Throwable $e) {
-                    $data['image'] = $request->file('image')->store('blogs', 'public');
-                }
-            } else {
-                if ($blog->image && Storage::disk('public')->exists($blog->image)) {
-                    Storage::disk('public')->delete($blog->image);
-                }
-
-                $data['image'] = $request->file('image')->store('blogs', 'public');
-            }
+            $path = Storage::disk('cloudinary')->putFile('blogs', $request->file('image'));
+            $data['image'] = Storage::disk('cloudinary')->url($path);
         }
 
         $data['slug'] = Str::slug($data['title']) . '-' . time();
 
         $blog->update($data);
-
-        // Invalidate blogs list cache
-        Cache::forget('blogs:list');
 
         return response()->json([
             'message' => 'Blog updated successfully',
@@ -192,21 +135,17 @@ class BlogController extends Controller
 
     public function destroy($blog)
     {
-        $blog = Blog::where('user_id', request()->user()->id)
-            ->where(function ($query) use ($blog) {
-                $query->where('slug', $blog)->orWhere('id', $blog);
-            })
-            ->firstOrFail();
+        $query = Blog::where('user_id', request()->user()->id);
 
-        // Delete local image only if stored on public disk. Cloudinary images are left (optional cleanup).
-        if ($blog->image && Storage::disk('public')->exists($blog->image)) {
-            Storage::disk('public')->delete($blog->image);
+        if (is_numeric($blog)) {
+            $query->where('id', $blog);
+        } else {
+            $query->where('slug', $blog);
         }
 
-        $blog->delete();
+        $blog = $query->firstOrFail();
 
-        // Invalidate blogs list cache
-        Cache::forget('blogs:list');
+        $blog->delete();
 
         return response()->json([
             'message' => 'Blog deleted successfully'
