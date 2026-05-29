@@ -1,5 +1,5 @@
 import React from "react";
-import { Mail, Facebook, Twitter, Instagram, Youtube, Pin } from "lucide-react";
+import { Mail, Facebook, Twitter, Instagram, Github, Linkedin } from "lucide-react";
 
 const Footer = () => {
     return (
@@ -23,11 +23,51 @@ const Footer = () => {
 
                     {/* Social Icons */}
                     <div className="flex gap-6 mt-10">
-                        <Facebook className="cursor-pointer hover:text-white" />
-                        <Twitter className="cursor-pointer hover:text-white" />
-                        <Instagram className="cursor-pointer hover:text-white" />
-                        <Youtube className="cursor-pointer hover:text-white" />
-                        <Pin className="cursor-pointer hover:text-white" />
+                        <a
+                            href="https://www.facebook.com/pravesh.ach/"
+                            target="_blank"
+                            rel="noreferrer"
+                            aria-label="Facebook"
+                            className="hover:text-white"
+                        >
+                            <Facebook className="cursor-pointer" />
+                        </a>
+                        <a
+                            href="https://x.com/PrabeshAch33319"
+                            target="_blank"
+                            rel="noreferrer"
+                            aria-label="X"
+                            className="hover:text-white"
+                        >
+                            <Twitter className="cursor-pointer" />
+                        </a>
+                        <a
+                            href="https://www.instagram.com/prabesh_ach/"
+                            target="_blank"
+                            rel="noreferrer"
+                            aria-label="Instagram"
+                            className="hover:text-white"
+                        >
+                            <Instagram className="cursor-pointer" />
+                        </a>
+                        <a
+                            href="https://www.linkedin.com/in/prabesh-acharya-8547a2321/"
+                            target="_blank"
+                            rel="noreferrer"
+                            aria-label="LinkedIn"
+                            className="hover:text-white"
+                        >
+                            <Linkedin className="cursor-pointer" />
+                        </a>
+                        <a
+                            href="https://github.com/prabesh1032"
+                            target="_blank"
+                            rel="noreferrer"
+                            aria-label="GitHub"
+                            className="hover:text-white"
+                        >
+                            <Github className="cursor-pointer" />
+                        </a>
                     </div>
                 </div>
 

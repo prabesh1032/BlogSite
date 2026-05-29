@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import HeroBanner from "../components/HeroBanner";
-import { MapPin, Mail as MailIcon, CheckCircle, MessageCircle, PhoneCall, Instagram, Facebook, Twitter } from 'lucide-react'
+import { MapPin, Mail as MailIcon, CheckCircle, MessageCircle, PhoneCall, Instagram, Facebook, Twitter, Github, Linkedin } from 'lucide-react'
 
 export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', subject: '', message: '' })
@@ -61,9 +61,9 @@ export default function Contact() {
       {
         icon: <MailIcon className="w-5 h-5" />,
         label: "Email us",
-        value: "noreply.typetheory@gmail.com",
+        value: "noreply.inklight@gmail.com",
         action: "Send email",
-        href: "mailto:noreply.typetheory@gmail.com",
+        href: "mailto:noreply.inklight@gmail.com",
         bg: "bg-blue-50",
         color: "text-blue-600",
         link: "text-blue-600",
@@ -71,9 +71,9 @@ export default function Contact() {
       {
         icon: <PhoneCall className="w-5 h-5" />,
         label: "Call us",
-        value: "+977 9812345110",
+        value: "+977 9812965110",
         action: "Call now",
-        href: "tel:+9779812345110",
+        href: "tel:+9779812965110",
         bg: "bg-emerald-50",
         color: "text-emerald-600",
         link: "text-emerald-600",
@@ -97,7 +97,12 @@ export default function Contact() {
           <h4 className="font-medium text-gray-900">{item.label}</h4>
           <p className="text-sm text-gray-500 mt-1 break-all">{item.value}</p>
         </div>
-        <a href={item.href} className={`mt-auto text-sm ${item.link} flex items-center gap-1 hover:underline`}>
+        <a
+          href={item.href}
+          target="_blank"
+          rel="noreferrer"
+          className={`mt-auto text-sm ${item.link} flex items-center gap-1 hover:underline`}
+        >
           {item.action} →
         </a>
       </div>
@@ -228,10 +233,51 @@ export default function Contact() {
                 <div className="w-10 h-0.5 bg-sky-500 rounded-full" />
               </div>
               <div className="flex items-center gap-3">
-                <a aria-label="facebook" className="p-2 rounded bg-gray-100 hover:bg-gray-200"><Facebook className="w-5 h-5 text-gray-700" /></a>
-                <a aria-label="twitter" className="p-2 rounded bg-gray-100 hover:bg-gray-200"><Twitter className="w-5 h-5 text-gray-700" /></a>
-                <a aria-label="instagram" className="p-2 rounded bg-gray-100 hover:bg-gray-200"><Instagram className="w-5 h-5 text-gray-700" /></a>
-                <a aria-label="github" className="p-2 rounded bg-gray-100 hover:bg-gray-200"><MailIcon className="w-5 h-5 text-gray-700" /></a>
+                <a
+                  href="https://www.facebook.com/pravesh.ach/"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="facebook"
+                  className="p-2 rounded bg-gray-100 hover:bg-gray-200"
+                >
+                  <Facebook className="w-5 h-5 text-gray-700" />
+                </a>
+                <a
+                  href="https://x.com/PrabeshAch33319"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="twitter"
+                  className="p-2 rounded bg-gray-100 hover:bg-gray-200"
+                >
+                  <Twitter className="w-5 h-5 text-gray-700" />
+                </a>
+                <a
+                  href="https://www.instagram.com/prabesh_ach/"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="instagram"
+                  className="p-2 rounded bg-gray-100 hover:bg-gray-200"
+                >
+                  <Instagram className="w-5 h-5 text-gray-700" />
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/prabesh-acharya-8547a2321/"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="linkedin"
+                  className="p-2 rounded bg-gray-100 hover:bg-gray-200"
+                >
+                  <Linkedin className="w-5 h-5 text-gray-700" />
+                </a>
+                <a
+                  href="https://github.com/prabesh1032"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="github"
+                  className="p-2 rounded bg-gray-100 hover:bg-gray-200"
+                >
+                  <Github className="w-5 h-5 text-gray-700" />
+                </a>
               </div>
             </div>
           </aside>
