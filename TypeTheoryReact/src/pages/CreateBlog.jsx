@@ -8,6 +8,8 @@ import { showErrorToast, showSuccessToast } from "../components/ShowToast";
 import HeroBanner from "../components/HeroBanner";
 import { categories } from "../constants/categories";
 import CategoryDropdown from "../components/CategoryDropdown";
+import ReactQuill from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
 
 export default function CreateBlog() {
   const navigate = useNavigate();
@@ -43,6 +45,10 @@ export default function CreateBlog() {
   const onSubmit = async (data) => {
     try {
       setServerError("");
+      if (!data.description || data.description === "<p><br></p>") {
+        setError("description", { type: "manual", message: "Description is required" });
+        return;
+      }
       const payload = new FormData();
       payload.append("title", data.title);
       payload.append("category", data.category);
@@ -78,7 +84,7 @@ export default function CreateBlog() {
   return (
     <>
       <HeroBanner title="Create Blog" />
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4 py-10">
+      <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 backdrop-blur-sm px-4 py-10 overflow-y-auto sm:items-center">
         <div className="w-full max-w-3xl rounded-2xl bg-white shadow-xl">
           <div className="flex items-center justify-between border-b px-6 py-4">
             <div>
@@ -116,7 +122,7 @@ export default function CreateBlog() {
                 <input
                   {...register("title", { required: "Title is required" })}
                   placeholder="Enter blog title"
-                  className="mt-2 w-full rounded-lg border border-gray-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                  className="mt-2 w-full rounded-lg border border-gray-200 px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-indigo-400"
                 />
                 {errors.title && (
                   <p className="mt-1 text-xs text-red-500">{errors.title.message}</p>
@@ -126,11 +132,13 @@ export default function CreateBlog() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700">Description</label>
-              <textarea
-                {...register("description", { required: "Description is required" })}
-                rows={6}
+              <ReactQuill
+                theme="snow"
                 placeholder="Write your blog description..."
-                className="mt-2 w-full rounded-lg border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                onChange={(value) => {
+                  setValue("description", value, { shouldValidate: true });
+                }}
+                className="mt-2 create-blog-quill"
               />
               {errors.description && (
                 <p className="mt-1 text-xs text-red-500">{errors.description.message}</p>

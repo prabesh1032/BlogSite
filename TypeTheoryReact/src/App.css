@@ -15,6 +15,15 @@
   animation: fadeIn 0.2s ease-out;
 }
 
+.create-blog-quill .ql-container {
+  min-height: 240px;
+}
+
+.create-blog-quill .ql-editor {
+  min-height: 200px;
+  font-size: 1rem;
+}
+
 /* Smooth scroll behavior */
 html {
   font-size: 80%;

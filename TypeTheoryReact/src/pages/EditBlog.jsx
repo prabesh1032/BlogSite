@@ -8,6 +8,8 @@ import { showErrorToast, showSuccessToast } from "../components/ShowToast";
 import HeroBanner from "../components/HeroBanner";
 import { categories } from "../constants/categories";
 import CategoryDropdown from "../components/CategoryDropdown";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
 
 export default function EditBlog() {
   const navigate = useNavigate();
@@ -36,6 +38,7 @@ export default function EditBlog() {
     reset,
     setValue,
     clearErrors,
+    setError,
     trigger,
     formState: { errors },
   } = useForm({
@@ -56,6 +59,7 @@ export default function EditBlog() {
     });
   }, [blog, reset]);
   const category = useWatch({ control, name: "category" });
+  const description = useWatch({ control, name: "description" });
   const imageRegister = register("image");
   const [selectedFileName, setSelectedFileName] = useState("");
 
@@ -66,6 +70,11 @@ export default function EditBlog() {
         const message = "No blog selected for editing.";
         setServerError(message);
         showErrorToast(message);
+        return;
+      }
+
+      if (!data.description || data.description === "<p><br></p>") {
+        setError("description", { type: "manual", message: "Description is required" });
         return;
       }
 
@@ -103,7 +112,7 @@ export default function EditBlog() {
   return (
     <>
       <HeroBanner title="Edit Blog" />
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4 py-10">
+      <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 backdrop-blur-sm px-4 py-10 overflow-y-auto sm:items-center">
         <div className="w-full max-w-3xl rounded-2xl bg-white shadow-xl">
           <div className="flex items-center justify-between border-b px-6 py-4">
             <div>
@@ -142,7 +151,7 @@ export default function EditBlog() {
                 <input
                   {...register("title", { required: "Title is required" })}
                   placeholder="Enter blog title"
-                  className="mt-2 w-full rounded-lg border border-gray-200 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                  className="mt-2 w-full rounded-lg border border-gray-200 px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-indigo-400"
                 />
                 {errors.title && (
                   <p className="mt-1 text-xs text-red-500">{errors.title.message}</p>
@@ -152,11 +161,14 @@ export default function EditBlog() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700">Description</label>
-              <textarea
-                {...register("description", { required: "Description is required" })}
-                rows={6}
+              <ReactQuill
+                theme="snow"
                 placeholder="Write your blog description..."
-                className="mt-2 w-full rounded-lg border border-gray-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                value={description || ""}
+                onChange={(value) => {
+                  setValue("description", value, { shouldValidate: true });
+                }}
+                className="mt-2 create-blog-quill"
               />
               {errors.description && (
                 <p className="mt-1 text-xs text-red-500">{errors.description.message}</p>
