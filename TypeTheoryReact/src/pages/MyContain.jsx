@@ -22,6 +22,9 @@ export default function MyContain() {
   const navigate = useNavigate();
   const [blogs, setBlogs] = useState([]);
   const [visibleCount, setVisibleCount] = useState(BLOGS_PER_PAGE);
+  const [offset, setOffset] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -32,17 +35,20 @@ export default function MyContain() {
       try {
         setError("");
         setIsLoading(true);
-        const data = await BlogService.getMyBlogs();
+        const data = await BlogService.getMyBlogs({ limit: BLOGS_PER_PAGE, offset: 0 });
         const list = Array.isArray(data?.blogs) ? data.blogs : [];
         if (isMounted) {
           setBlogs(list);
           setVisibleCount(BLOGS_PER_PAGE);
+          setOffset(list.length);
+          setHasMore(list.length === BLOGS_PER_PAGE);
         }
       } catch (err) {
         const message =
           err?.response?.data?.message || err?.message || "Failed to load blogs";
         if (isMounted) {
           setError(message);
+          setHasMore(false);
         }
       } finally {
         if (isMounted) {
@@ -71,7 +77,35 @@ export default function MyContain() {
   };
 
   const visibleBlogs = blogs.slice(0, visibleCount);
-  const canLoadMore = visibleCount < blogs.length;
+  const canLoadMore = hasMore || visibleCount < blogs.length;
+
+  const handleLoadMore = async () => {
+    if (isLoadingMore) return;
+    const nextVisible = visibleCount + BLOGS_PER_PAGE;
+    const needsMore = blogs.length < nextVisible && hasMore;
+
+    if (needsMore) {
+      try {
+        setIsLoadingMore(true);
+        const data = await BlogService.getMyBlogs({ limit: BLOGS_PER_PAGE, offset });
+        const list = Array.isArray(data?.blogs) ? data.blogs : [];
+        setBlogs((current) => [...current, ...list]);
+        setOffset((current) => current + list.length);
+        setHasMore(list.length === BLOGS_PER_PAGE);
+      } catch (err) {
+        const message =
+          err?.response?.data?.message ||
+          err?.message ||
+          "Failed to load more blogs";
+        setError(message);
+        setHasMore(false);
+      } finally {
+        setIsLoadingMore(false);
+      }
+    }
+
+    setVisibleCount(nextVisible);
+  };
 
   return (
     <section className=" min-h-screen">
@@ -143,7 +177,7 @@ export default function MyContain() {
 
             {canLoadMore && (
               <div className="text-center mt-12 sm:mt-16">
-                <LoadMore onClick={() => setVisibleCount((count) => count + BLOGS_PER_PAGE)}>
+                <LoadMore onClick={handleLoadMore} loading={isLoadingMore}>
                   Load More Articles
                 </LoadMore>
               </div>

@@ -41,6 +41,9 @@ export default function Search() {
   const { token } = useStateContext();
   const [blogs, setBlogs] = useState([]);
   const [visibleCount, setVisibleCount] = useState(BLOGS_PER_PAGE);
+  const [offset, setOffset] = useState(0);
+  const [hasMore, setHasMore] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [likedBlogs, setLikedBlogs] = useState(() => {
@@ -76,17 +79,21 @@ export default function Search() {
         setBlogs([]);
         setIsLoading(false);
         setError("");
+        setOffset(0);
+        setHasMore(false);
         return;
       }
 
       try {
         setIsLoading(true);
         setError("");
-        const data = await BlogService.searchBlogs(query);
+        const data = await BlogService.searchBlogs(query, { limit: BLOGS_PER_PAGE, offset: 0 });
         const list = Array.isArray(data?.blogs) ? data.blogs : [];
         if (isMounted) {
           setBlogs(list);
           setVisibleCount(BLOGS_PER_PAGE);
+          setOffset(list.length);
+          setHasMore(list.length === BLOGS_PER_PAGE);
         }
       } catch (err) {
         const message =
@@ -95,6 +102,7 @@ export default function Search() {
           "Failed to load search results";
         if (isMounted) {
           setError(message);
+          setHasMore(false);
         }
       } finally {
         if (isMounted) {
@@ -110,7 +118,7 @@ export default function Search() {
   }, [query]);
 
   const visibleBlogs = useMemo(() => blogs.slice(0, visibleCount), [blogs, visibleCount]);
-  const canLoadMore = visibleCount < blogs.length;
+  const canLoadMore = hasMore || visibleCount < blogs.length;
 
   const toggleLike = (blogId) => {
     if (!token) {
@@ -132,6 +140,34 @@ export default function Search() {
       ...current,
       [blogId]: !current[blogId],
     }));
+  };
+
+  const handleLoadMore = async () => {
+    if (isLoadingMore) return;
+    const nextVisible = visibleCount + BLOGS_PER_PAGE;
+    const needsMore = blogs.length < nextVisible && hasMore;
+
+    if (needsMore) {
+      try {
+        setIsLoadingMore(true);
+        const data = await BlogService.searchBlogs(query, { limit: BLOGS_PER_PAGE, offset });
+        const list = Array.isArray(data?.blogs) ? data.blogs : [];
+        setBlogs((current) => [...current, ...list]);
+        setOffset((current) => current + list.length);
+        setHasMore(list.length === BLOGS_PER_PAGE);
+      } catch (err) {
+        const message =
+          err?.response?.data?.message ||
+          err?.message ||
+          "Failed to load more results";
+        setError(message);
+        setHasMore(false);
+      } finally {
+        setIsLoadingMore(false);
+      }
+    }
+
+    setVisibleCount(nextVisible);
   };
 
   return (
@@ -222,7 +258,7 @@ export default function Search() {
 
             {canLoadMore && (
               <div className="text-center mt-12 sm:mt-16">
-                <LoadMore onClick={() => setVisibleCount((count) => count + BLOGS_PER_PAGE)}>
+                <LoadMore onClick={handleLoadMore} loading={isLoadingMore}>
                   Load More Articles
                 </LoadMore>
               </div>

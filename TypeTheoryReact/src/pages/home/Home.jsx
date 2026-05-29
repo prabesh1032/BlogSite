@@ -30,6 +30,9 @@ export default function Home() {
     const { token } = useStateContext();
     const [blogs, setBlogs] = useState([]);
     const [visibleCount, setVisibleCount] = useState(BLOGS_PER_PAGE);
+    const [offset, setOffset] = useState(0);
+    const [hasMore, setHasMore] = useState(true);
+    const [isLoadingMore, setIsLoadingMore] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState("");
     const [likedBlogs, setLikedBlogs] = useState(() => {
@@ -67,11 +70,13 @@ export default function Home() {
             try {
                 setError("");
                 setIsLoading(true);
-                const data = await BlogService.getBlogs();
+                const data = await BlogService.getBlogs({ limit: BLOGS_PER_PAGE, offset: 0 });
                 const list = Array.isArray(data?.blogs) ? data.blogs : [];
                 if (isMounted) {
                     setBlogs(list);
-                                    setVisibleCount(BLOGS_PER_PAGE);
+                    setOffset(list.length);
+                    setHasMore(list.length === BLOGS_PER_PAGE);
+                    setVisibleCount(BLOGS_PER_PAGE);
                 }
             } catch (err) {
                 const message =
@@ -80,6 +85,7 @@ export default function Home() {
                     "Failed to load blogs";
                 if (isMounted) {
                     setError(message);
+                    setHasMore(false);
                 }
             } finally {
                 if (isMounted) {
@@ -129,6 +135,34 @@ export default function Home() {
         }));
     };
 
+    const handleLoadMore = async () => {
+        if (isLoadingMore) return;
+        const nextVisible = visibleCount + BLOGS_PER_PAGE;
+        const needsMore = filteredBlogs.length < nextVisible && hasMore;
+
+        if (needsMore) {
+            try {
+                setIsLoadingMore(true);
+                const data = await BlogService.getBlogs({ limit: BLOGS_PER_PAGE, offset });
+                const list = Array.isArray(data?.blogs) ? data.blogs : [];
+                setBlogs((current) => [...current, ...list]);
+                setOffset((current) => current + list.length);
+                setHasMore(list.length === BLOGS_PER_PAGE);
+            } catch (err) {
+                const message =
+                    err?.response?.data?.message ||
+                    err?.message ||
+                    "Failed to load more blogs";
+                setError(message);
+                setHasMore(false);
+            } finally {
+                setIsLoadingMore(false);
+            }
+        }
+
+        setVisibleCount(nextVisible);
+    };
+
     const filteredBlogs = useMemo(() => {
         if (!selectedCategory) {
             return blogs;
@@ -138,7 +172,7 @@ export default function Home() {
     }, [blogs, selectedCategory]);
 
     const visibleBlogs = filteredBlogs.slice(0, visibleCount);
-    const canLoadMore = visibleCount < filteredBlogs.length;
+    const canLoadMore = hasMore || visibleCount < filteredBlogs.length;
 
     const oldestBlogs = useMemo(() => {
         if (!blogs.length) return [];
@@ -233,7 +267,7 @@ export default function Home() {
 
                             {canLoadMore && (
                                 <div className="text-center mt-12 sm:mt-16">
-                                    <LoadMore onClick={() => setVisibleCount((count) => count + BLOGS_PER_PAGE)}>
+                                    <LoadMore onClick={handleLoadMore} loading={isLoadingMore}>
                                         Load More Articles
                                     </LoadMore>
                                 </div>

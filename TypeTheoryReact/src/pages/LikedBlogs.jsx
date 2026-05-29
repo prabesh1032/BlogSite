@@ -25,6 +25,9 @@ export default function LikedBlogs() {
   const navigate = useNavigate();
   const [allBlogs, setAllBlogs] = useState([]);
   const [visibleCount, setVisibleCount] = useState(BLOGS_PER_PAGE);
+  const [offset, setOffset] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [likedBlogs, setLikedBlogs] = useState(() => {
@@ -49,18 +52,21 @@ export default function LikedBlogs() {
       try {
         setError("");
         setIsLoading(true);
-        const data = await BlogService.getBlogs();
+        const data = await BlogService.getBlogs({ limit: BLOGS_PER_PAGE, offset: 0 });
         const list = Array.isArray(data?.blogs) ? data.blogs : [];
 
         if (isMounted) {
           setAllBlogs(list);
           setVisibleCount(BLOGS_PER_PAGE);
+          setOffset(list.length);
+          setHasMore(list.length === BLOGS_PER_PAGE);
         }
       } catch (err) {
         const message =
           err?.response?.data?.message || err?.message || "Failed to load liked blogs";
         if (isMounted) {
           setError(message);
+          setHasMore(false);
         }
       } finally {
         if (isMounted) {
@@ -115,9 +121,37 @@ export default function LikedBlogs() {
     }));
   };
 
-  const visibleBlogs = allBlogs.filter((blog) => Boolean(likedBlogs[blog.id]));
-  const pagedBlogs = visibleBlogs.slice(0, visibleCount);
-  const canLoadMore = visibleCount < visibleBlogs.length;
+  const filteredBlogs = allBlogs.filter((blog) => Boolean(likedBlogs[blog.id]));
+  const pagedBlogs = filteredBlogs.slice(0, visibleCount);
+  const canLoadMore = hasMore || visibleCount < filteredBlogs.length;
+
+  const handleLoadMore = async () => {
+    if (isLoadingMore) return;
+    const nextVisible = visibleCount + BLOGS_PER_PAGE;
+    const needsMore = filteredBlogs.length < nextVisible && hasMore;
+
+    if (needsMore) {
+      try {
+        setIsLoadingMore(true);
+        const data = await BlogService.getBlogs({ limit: BLOGS_PER_PAGE, offset });
+        const list = Array.isArray(data?.blogs) ? data.blogs : [];
+        setAllBlogs((current) => [...current, ...list]);
+        setOffset((current) => current + list.length);
+        setHasMore(list.length === BLOGS_PER_PAGE);
+      } catch (err) {
+        const message =
+          err?.response?.data?.message ||
+          err?.message ||
+          "Failed to load liked blogs";
+        setError(message);
+        setHasMore(false);
+      } finally {
+        setIsLoadingMore(false);
+      }
+    }
+
+    setVisibleCount(nextVisible);
+  };
 
   return (
     <section className=" min-h-screen">
@@ -148,7 +182,7 @@ export default function LikedBlogs() {
             </div>
             <p className="mt-4 text-sm text-gray-500">Loading amazing content...</p>
           </div>
-        ) : visibleBlogs.length === 0 ? (
+        ) : filteredBlogs.length === 0 && !hasMore ? (
           <EmptyState
             icon={Heart}
             title="No liked articles yet"
@@ -183,7 +217,7 @@ export default function LikedBlogs() {
 
             {canLoadMore && (
               <div className="text-center mt-12 sm:mt-16">
-                <LoadMore onClick={() => setVisibleCount((count) => count + BLOGS_PER_PAGE)}>
+                <LoadMore onClick={handleLoadMore} loading={isLoadingMore}>
                   Load More Articles
                 </LoadMore>
               </div>

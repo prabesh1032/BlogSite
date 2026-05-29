@@ -1,14 +1,20 @@
 import { api } from "./axios";
 
 // Get all blogs
-export async function getBlogsAPI() {
-  const res = await api.get("/blogs");
+export async function getBlogsAPI({ limit, offset } = {}) {
+  const params = {};
+  if (typeof limit === "number" && limit > 0) params.limit = limit;
+  if (typeof offset === "number" && offset >= 0) params.offset = offset;
+  const res = await api.get("/blogs", { params });
   return res.data;
 }
 
 // Get blogs for logged-in user
-export async function getMyBlogsAPI() {
-  const res = await api.get("/my-blogs");
+export async function getMyBlogsAPI({ limit, offset } = {}) {
+  const params = {};
+  if (typeof limit === "number" && limit > 0) params.limit = limit;
+  if (typeof offset === "number" && offset >= 0) params.offset = offset;
+  const res = await api.get("/my-blogs", { params });
   return res.data;
 }
 
@@ -19,10 +25,11 @@ export async function getBlogAPI(id) {
 }
 
 // Search blogs by query
-export async function searchBlogsAPI(query) {
-  const res = await api.get("/blogs/search", {
-    params: { q: query },
-  });
+export async function searchBlogsAPI(query, { limit, offset } = {}) {
+  const params = { q: query };
+  if (typeof limit === "number" && limit > 0) params.limit = limit;
+  if (typeof offset === "number" && offset >= 0) params.offset = offset;
+  const res = await api.get("/blogs/search", { params });
   return res.data;
 }
 

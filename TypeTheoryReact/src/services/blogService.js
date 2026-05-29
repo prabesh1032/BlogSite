@@ -10,14 +10,14 @@ import {
 
 const BlogService = {
   // Get all blogs
-  async getBlogs() {
-    const response = await getBlogsAPI();
+  async getBlogs(options) {
+    const response = await getBlogsAPI(options);
     return response;
   },
 
   // Get blogs for logged-in user
-  async getMyBlogs() {
-    const response = await getMyBlogsAPI();
+  async getMyBlogs(options) {
+    const response = await getMyBlogsAPI(options);
     return response;
   },
 
@@ -28,8 +28,8 @@ const BlogService = {
   },
 
   // Search blogs
-  async searchBlogs(query) {
-    const response = await searchBlogsAPI(query);
+  async searchBlogs(query, options) {
+    const response = await searchBlogsAPI(query, options);
     return response;
   },
 
