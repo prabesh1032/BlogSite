@@ -51,46 +51,74 @@ export default function Contact() {
 
       <main className="max-w-6xl mx-auto px-6 py-16">
         {/* Top contact cards */}
-        <section className="mb-12 space-y-6">
-          <div className="space-y-3">
-            <p className="text-gray-500 text-sm text-center">Have a question, suggestion, or just want to say hello? We'd love to hear from you! Fill out the form below or reach out through any of our contact channels.</p>
-          </div>
+       <section className="mb-12 space-y-6">
+  <p className=" text-sm text-extrabold text-center max-w-xl mx-auto" style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}>
+    Have a question, suggestion, or just want to say hello? We'd love to hear from you! Fill out the form below or reach out through any of our contact channels.
+  </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white shadow rounded p-6 flex flex-col items-start gap-3">
-              <div className="p-3 rounded bg-sky-50 text-sky-600"><MailIcon className="w-6 h-6" /></div>
-              <h4 className="font-semibold text-lg">Email Us</h4>
-              <p className="text-sm text-gray-500">noreply.typetheory@gmail.com</p>
-            </div>
-
-            <div className="bg-white shadow rounded p-6 flex flex-col items-start gap-3">
-              <div className="p-3 rounded bg-sky-50 text-sky-600"><PhoneCall className="w-6 h-6" /></div>
-              <h4 className="font-semibold text-lg">Call Us</h4>
-              <p className="text-sm text-gray-500">+977 9812345110</p>
-            </div>
-
-            <div className="bg-white shadow rounded p-6 flex flex-col items-start gap-3">
-              <div className="p-3 rounded bg-sky-50 text-sky-600"><MapPin className="w-6 h-6" /></div>
-              <h4 className="font-semibold text-lg">Visit Us</h4>
-              <p className="text-sm text-gray-500">Kathmandu, Nepal</p>
-            </div>
-          </div>
-        </section>
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    {[
+      {
+        icon: <MailIcon className="w-5 h-5" />,
+        label: "Email us",
+        value: "noreply.typetheory@gmail.com",
+        action: "Send email",
+        href: "mailto:noreply.typetheory@gmail.com",
+        bg: "bg-blue-50",
+        color: "text-blue-600",
+        link: "text-blue-600",
+      },
+      {
+        icon: <PhoneCall className="w-5 h-5" />,
+        label: "Call us",
+        value: "+977 9812345110",
+        action: "Call now",
+        href: "tel:+9779812345110",
+        bg: "bg-emerald-50",
+        color: "text-emerald-600",
+        link: "text-emerald-600",
+      },
+      {
+        icon: <MapPin className="w-5 h-5" />,
+        label: "Visit us",
+        value: "Kathmandu, Nepal",
+        action: "View on map",
+        href: "https://maps.google.com/?q=Kathmandu,Nepal",
+        bg: "bg-orange-50",
+        color: "text-orange-600",
+        link: "text-orange-600",
+      },
+    ].map((item) => (
+      <div key={item.label} className="bg-white border border-gray-100 rounded-xl p-6 flex flex-col gap-3">
+        <div className={`w-11 h-11 rounded-lg ${item.bg} ${item.color} flex items-center justify-center`}>
+          {item.icon}
+        </div>
+        <div>
+          <h4 className="font-medium text-gray-900">{item.label}</h4>
+          <p className="text-sm text-gray-500 mt-1 break-all">{item.value}</p>
+        </div>
+        <a href={item.href} className={`mt-auto text-sm ${item.link} flex items-center gap-1 hover:underline`}>
+          {item.action} →
+        </a>
+      </div>
+    ))}
+  </div>
+</section>
 
         <div className="grid gap-8 grid-cols-1 lg:grid-cols-3">
 
           {/* Contact Form */}
           <div className="lg:col-span-2 bg-white shadow rounded p-8">
-            <div className="space-y-3 mb-6">
-              <span className="inline-block text-xs font-semibold tracking-[0.2em] text-sky-600 uppercase">Send a message</span>
-              <h2
-                className="text-3xl md:text-4xl font-semibold leading-tight text-gray-900"
+            <div className="space-y-1 mb-6">
+              <span className="text-xs font-semibold tracking-[0.2em] text-sky-600 uppercase">
+                Your Library
+              </span>
+              <h3
+                className="text-3xl font-semibold text-gray-900"
                 style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}
               >
-                We'd love to hear from you
-              </h2>
-              <div className="w-12 h-0.5 bg-sky-500 rounded-full" />
-              <p className="text-sm text-gray-500">Have a question, suggestion, or just want to say hello? We'll respond within 24 hours.</p>
+                Personal Writing Collection
+              </h3>
             </div>
 
             {status === 'success' && (
@@ -142,15 +170,16 @@ export default function Contact() {
           {/* Right column: Why Contact, Connect */}
           <aside className="space-y-6">
             <div className="bg-white shadow rounded p-6">
-              <div className="space-y-2 mb-4">
-                <span className="inline-block text-xs font-semibold tracking-[0.2em] text-sky-600 uppercase">Why reach out</span>
+              <div className="space-y-1 mb-4">
+                <span className="text-xs font-semibold tracking-[0.2em] text-sky-600 uppercase">
+                  Why reach out
+                </span>
                 <h3
-                  className="text-2xl font-semibold text-gray-900"
+                  className="text-3xl font-semibold text-gray-900"
                   style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}
                 >
                   Why Contact Us?
                 </h3>
-                <div className="w-10 h-0.5 bg-sky-500 rounded-full" />
               </div>
               <ul className="space-y-3 text-sm text-gray-600">
                 <li className="flex items-start gap-3">
@@ -210,16 +239,14 @@ export default function Contact() {
 
         {/* FAQ Section */}
         <section className="mt-16">
-          <div className="text-center space-y-3 mb-8">
-            <span className="inline-block text-xs font-semibold tracking-[0.2em] text-sky-600 uppercase">FAQs</span>
+          <div className="text-center space-y-1 mb-8">
+            <span className="text-xs font-semibold tracking-[0.2em] text-sky-600 uppercase">FAQs</span>
             <h3
-              className="text-2xl md:text-3xl font-semibold text-gray-900"
+              className="text-3xl font-semibold text-gray-900"
               style={{ fontFamily: "'DM Serif Display', Georgia, serif" }}
             >
               Frequently Asked Questions
             </h3>
-            <div className="w-12 h-0.5 bg-sky-500 rounded-full mx-auto" />
-            <p className="text-center text-sm text-gray-500">Quick answers to common questions</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
