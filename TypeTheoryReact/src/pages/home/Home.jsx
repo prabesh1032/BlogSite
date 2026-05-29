@@ -99,6 +99,7 @@ export default function Home() {
             isMounted = false;
         };
     }, []);
+    console.log(import.meta.env.VITE_APP_API_BASE_URL);
 
     const formatDate = (value) => {
         if (!value) return "";
